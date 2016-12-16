@@ -9,13 +9,14 @@
          @mousedown="mouseDown"
          @mouseup="mouseUp"
          @mousemove="mouseMove"
+         @mouseout="mouseUp"
          style="left:120px; top:80px"
     >
-        <div draggable="false" v-if="type === 'text'" style="display: inline;">Text</div>
+        <div draggable="false" v-if="type === 'text'" style="display: inline;">TextTextTextTextText</div>
         <img draggable="false" v-if="type === 'image'" style="display: inline;"
              src="../assets/widget_image_background.jpg">
-        <img draggable="false" v-if="type === 'barcode'" style="display: inline;"
-             src="../assets/widget_barcode_background.jpg">
+        <!--<img draggable="false" v-if="type === 'barcode'" style="display: inline;"-->
+             <!--src="../assets/widget_barcode_background.jpg">-->
 
     </div>
 </template>
@@ -38,6 +39,10 @@
                 moveStartX: 0,
                 moveStartY: 0,
             }
+        },
+
+        created:function () {
+            console.log(this.type);
         },
 
         methods: {
