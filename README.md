@@ -1,4 +1,4 @@
-# list-printer
+# Rapid Printer Editor
 
 > A printer editor that can batch print.
 
