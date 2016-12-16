@@ -14,6 +14,9 @@
         <div draggable="false" v-if="type === 'text'" style="display: inline;">Text</div>
         <img draggable="false" v-if="type === 'image'" style="display: inline;"
              src="../assets/widget_image_background.jpg">
+        <img draggable="false" v-if="type === 'barcode'" style="display: inline;"
+             src="../assets/widget_barcode_background.jpg">
+
     </div>
 </template>
 

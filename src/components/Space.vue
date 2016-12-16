@@ -8,6 +8,7 @@
             <div id="page" v-bind:style="{ width: getPageWidth, height: getPageHeight }">
                 <app-widget type="text"></app-widget>
                 <app-widget type="image"></app-widget>
+                <app-widget type="barcode"></app-widget>
             </div>
         </div>
     </div>
