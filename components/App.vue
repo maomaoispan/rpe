@@ -21,12 +21,12 @@
 </template>
 
 <script>
-    import AppHeader from "./components/Header.vue";
-    import AppToolBar from "./components/ToolBar.vue";
-    import AppSpace from "./components/Space.vue";
-    import AppFile from "./components/File.vue";
-    import AppPropertyBar from "./components/PropertyBar.vue";
-    import AppFooter from "./components/Footer.vue"
+    import AppHeader from "./Header.vue";
+    import AppToolBar from "./ToolBar.vue";
+    import AppSpace from "./Space.vue";
+    import AppFile from "./File.vue";
+    import AppPropertyBar from "./PropertyBar.vue";
+    import AppFooter from "./Footer.vue"
 
     export default{
         components: {
@@ -41,9 +41,6 @@
 </script>
 
 <style>
-
-
-
     html, #app {
         height: 100%;
         font-size: 15px;
@@ -110,6 +107,4 @@
      .title {
         background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
     }
-
-
 </style>

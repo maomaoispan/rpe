@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import AppWidget from "../components/Widget.vue"
+    import AppWidget from "./Widget.vue"
 
     module.exports = {
         data: function () {

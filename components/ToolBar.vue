@@ -7,22 +7,22 @@
             Tool
         </div>
         <div class="content">
-            <div id="widget-text" @click="onclick"></div>
-            <div id="widget-image" @click="onclick"></div>
-            <div id="widget-barcode" @click="onclick"></div>
+            <div id="widget-text" @click="addWidget"></div>
+            <!--<div id="widget-image" @click=""></div>-->
+            <!--<div id="widget-barcode" @click=""></div>-->
         </div>
     </div>
 </template>
 
 <script>
-
-    module.exports = {
+    export default {
         data: function () {
             return {}
         },
         methods: {
-            onclick: function (event) {
-                console.log(event.target.id);
+            addWidget: function (event) {
+                this.$store.dispatch("addWidget", event.target.id);
+                console.log(this.$store);
             }
         }
     }
