@@ -4,12 +4,16 @@
 import * as types from "./mutation-types"
 
 
-export const addWidget = ({commit, type}) => {
-    commit(types.ADD_WIDGET, {type})
+export const addWidget = ({commit}, type) => {
+    setTimeout(() => {
+        commit(types.ADD_WIDGET, type)
+
+    }, 1000)
+    // commit(types.ADD_WIDGET, type)
 }
 
 export const editWidget = ({commit}, info) => {
-    commit(types.EDIT_WIDGET, info)
+    commit(types.UPDATE_WIDGET, info)
 }
 
 export const deleteWidget = ({commit}) => {

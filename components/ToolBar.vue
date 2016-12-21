@@ -7,22 +7,25 @@
             Tool
         </div>
         <div class="content">
-            <div id="widget-text" @click="addWidget"></div>
-            <!--<div id="widget-image" @click=""></div>-->
-            <!--<div id="widget-barcode" @click=""></div>-->
+            <div id="widget-text" @click="addWidget('text')"></div>
+            <div id="widget-image" @click="addWidget('image')"></div>
+            <div id="widget-barcode" @click="addWidget('barcode')"></div>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapMutations} from "vuex"
+    import * as types from "../store/mutation-types"
+
     export default {
         data: function () {
             return {}
         },
         methods: {
-            addWidget: function (event) {
-                this.$store.dispatch("addWidget", event.target.id);
-                console.log(this.$store);
+            addWidget: function (type, event) {
+                console.log((new Date()).getTime());
+                this.$store.commit(types.ADD_WIDGET, type);
             }
         }
     }

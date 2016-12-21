@@ -3,7 +3,7 @@ import store from"./store/index"
 import App from './components/App.vue'
 
 new Vue({
-    store,
     el: '#app',
+    store,
     render: h => h(App)
 });

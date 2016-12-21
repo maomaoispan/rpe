@@ -23,7 +23,7 @@
 <script>
     import AppHeader from "./Header.vue";
     import AppToolBar from "./ToolBar.vue";
-    import AppSpace from "./Space.vue";
+    import AppSpace from "./WorkSpace.vue";
     import AppFile from "./File.vue";
     import AppPropertyBar from "./PropertyBar.vue";
     import AppFooter from "./Footer.vue"
@@ -94,7 +94,7 @@
         bottom: 0;
         height: 35px;
         width: 100%;
-        background-color: #cfcfcf;
+        background-color: #c0c0c0;
         position: absolute;
     }
 

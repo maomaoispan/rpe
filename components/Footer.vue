@@ -3,7 +3,7 @@
 */
 <template>
     <div id="footer">
-        <!--<address>maomaoispan@163.com</address>-->
+        <address style="margin-bottom:5px">maomaoispan@163.com</address>
     </div>
 </template>
 

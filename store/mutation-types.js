@@ -3,6 +3,9 @@
  */
 
 export const ADD_WIDGET = "ADD_WIDGET"
-export const  EDIT_WIDGET = "EDIT_WIDGET"
-export  const DELETE_WIDGET = "DELETE_WIDGET"
-export  const ACTIVE_WIDGET = "ACTIVE_WIDGET"
+export const UPDATE_WIDGET = "UPDATE_WIDGET"
+export const DELETE_WIDGET = "DELETE_WIDGET"
+export const ACTIVE_WIDGET = "ACTIVE_WIDGET"
+
+
+export const UPDATE_PAGE = "UPDATE_PAGE"
