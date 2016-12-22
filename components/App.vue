@@ -66,12 +66,7 @@
         background-color: #eaeaec;
     }
 
-    #space {
-        float: left;
-        height: 300px;
-        width: calc(100% - 270px);
-        background-color: #ffffff;
-    }
+
 
     #file {
         float: left;

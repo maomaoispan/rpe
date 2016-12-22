@@ -7,25 +7,50 @@
             Tool
         </div>
         <div class="content">
-            <div id="widget-text" @click="addWidget('text')"></div>
-            <div id="widget-image" @click="addWidget('image')"></div>
-            <div id="widget-barcode" @click="addWidget('barcode')"></div>
+            <div id="addWidgetText" @click="addWidget"></div>
+            <div id="addWidgetImage" @click="addWidget"></div>
+            <div id="addWidgetBarcode" @click="addWidget"></div>
+            <div id="addWidgetQRCode" @click="addWidget"></div>
         </div>
     </div>
 </template>
 
 <script>
     import {mapMutations} from "vuex"
-    import * as types from "../store/mutation-types"
+    import * as MUTATION_TYPES from "../store/mutationTypes"
+    import * as WIDGET_TYPES from "./WidgetTypes"
 
     export default {
         data: function () {
             return {}
         },
         methods: {
-            addWidget: function (type, event) {
-                console.log((new Date()).getTime());
-                this.$store.commit(types.ADD_WIDGET, type);
+            addWidget: function (event) {
+                let _type = "";
+
+                switch (event.target.id) {
+                    case "addWidgetText":
+                        _type = WIDGET_TYPES.TEXT;
+                        break;
+
+                    case "addWidgetImage":
+                        _type = WIDGET_TYPES.IMAGE;
+                        break;
+
+                    case "addWidgetBarcode":
+                        _type = WIDGET_TYPES.BARCODE;
+                        break;
+
+                    case"addWidgetQRCode":
+                        _type = WIDGET_TYPES.QR_CODE;
+                        break;
+
+                    default:
+                        break;
+                }
+                if (_type !== "") {
+                    this.$store.commit(MUTATION_TYPES.ADD_WIDGET, _type);
+                }
             }
         }
     }
@@ -34,7 +59,7 @@
 
 <style>
 
-    #widget-text, #widget-image, #widget-barcode {
+    #addWidgetText, #addWidgetImage, #addWidgetBarcode, #addWidgetQRCode {
         margin: 8px;
         border: 2px solid #797979;
         border-radius: 4px;
@@ -44,20 +69,24 @@
         /*cursor: pointer;;*/
     }
 
-    #widget-text:hover, #widget-image:hover, #widget-barcode:hover {
+    #addWidgetText:hover, #addWidgetImage:hover, #addWidgetBarcode:hover, #addWidgetQRCode:hover {
         box-shadow: rgb(169, 169, 169) 0px 0px 18px;
     }
 
-    #widget-text {
+    #addWidgetText {
         background-image: url("../assets/widget_text_background.jpg");
     }
 
-    #widget-image {
+    #addWidgetImage {
         background-image: url("../assets/widget_image_background.jpg");
     }
 
-    #widget-barcode {
+    #addWidgetBarcode {
         background-image: url("../assets/widget_barcode_background.jpg");
+    }
+
+    #addWidgetQRCode {
+        background-image: url("../assets/widget_qr_code_background.jpg");
     }
 
 </style>

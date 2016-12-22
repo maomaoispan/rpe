@@ -14,40 +14,41 @@
          v-bind:style="{left:left, top:top}"
     >
         <div draggable="false"
-             v-if="type === 'text'"
-             style="display: inline;">{{text}}
+             v-if="type === WIDGET_TYPES.TEXT"
+             style="display: inline;">{{textInfo.value}}
         </div>
 
         <img draggable="false"
-             v-if="type === 'image'"
+             v-if="type === WIDGET_TYPES.IMAGE"
              style="display: inline;"
-             v-on:click.prevent
-             src="../assets/widget_image_background.jpg">
+             v-bind:src="imageInfo.src">
 
-        <!--<img draggable="false" v-if="type === 'barcode'" style="display: inline;"-->
+        <canvas draggable="false"
+                v-if="type === WIDGET_TYPES.BARCODE"
+                style="display: inline;"></canvas>
 
-        <!--src="../assets/widget_barcode_background.jpg">-->
+        <canvas draggable="false"
+                v-if="type === WIDGET_TYPES.QR_CODE"
+                style="display: inline"></canvas>
 
     </div>
 </template>
 
 <script>
-    import  * as types from "../store/mutation-types"
+    import  * as MUTATION_TYPES from "../store/mutationTypes"
+    import  * as WIDGET_TYPES from "./WidgetTypes"
 
     export default{
+
         props: [
+            "id",
             "type",
-            "id"
         ],
 
         data: function () {
-            return {
-                a_left: 190,
-                a_top: 50,
-                left: 0,
-                top: 0,
-                selected: false,
 
+            return {
+                WIDGET_TYPES: WIDGET_TYPES,
                 tempLeft: 20,
                 tempTop: 20,
                 isDown: false,
@@ -57,8 +58,10 @@
         },
 
         computed: {
+
             widget: function () {
                 var widgets = this.$store.getters.widgets;
+
                 for (let i = 0; i < widgets.length; i++) {
                     if (this.id === widgets[i].id) {
                         return widgets[i];
@@ -75,16 +78,41 @@
                 return this.widget.top + "px";
             },
 
-            text: function () {
-                return this.widget.text;
+            textInfo: function () {
+                if (this.type === WIDGET_TYPES.TEXT) {
+                    return {
+                        value: this.widget.value
+                    }
+                }
             },
 
-            src: function () {
-                return this.widget.src;
+            imageInfo: function () {
+                if (this.type === WIDGET_TYPES.IMAGE) {
+                    return {
+                        src: this.widget.src
+                    }
+                }
+            },
+
+            barcodeInfo: function () {
+                if (this.type === WIDGET_TYPES.BARCODE) {
+                    return {
+                        value: this.widget.value
+                    }
+                }
+            },
+
+            qrCodeInfo: function () {
+                if (this.type === WIDGET_TYPES.QR_CODE) {
+                    return {
+                        value: this.widget.value
+                    }
+                }
             },
 
             isActived: function () {
                 var widget = this.$store.getters.activeWidget;
+
                 if (widget !== null && widget.id === this.id) {
                     return true;
                 }
@@ -93,20 +121,10 @@
         },
 
         methods: {
-            widget: function () {
-                var widgets = this.$store.getters.widgets;
-                for (let i = 0; i < widgets.length; i++) {
-                    if (widgets[i].id === this.id) {
-                        return widgets[i];
-                    }
-                }
-                return null;
-            },
 
             mouseDown: function (event) {
                 console.log("widget clicked");
-                this.$store.commit(types.ACTIVE_WIDGET, this.id);
-
+                this.$store.commit(MUTATION_TYPES.ACTIVE_WIDGET, this.id);
                 this.tempLeft = parseFloat(event.target.parentNode.style.left);
                 this.tempTop = parseFloat(event.target.parentNode.style.top);
                 this.moveStartX = parseFloat(event.clientX);
@@ -116,6 +134,7 @@
 
             mouseMove: function (event) {
                 var target = event.target.parentNode;
+
                 if (this.isDown) {
                     var newLeft = this.tempLeft + parseFloat(event.clientX) - parseFloat(this.moveStartX);
                     var newTop = this.tempTop + parseFloat(event.clientY) - parseFloat(this.moveStartY);
@@ -127,7 +146,7 @@
                         newTop = 0;
                     }
 
-                    this.$store.commit(types.UPDATE_WIDGET, {left: newLeft, top: newTop});
+                    this.$store.commit(MUTATION_TYPES.UPDATE_WIDGET, {left: newLeft, top: newTop});
                 }
             },
 
@@ -138,8 +157,36 @@
             },
 
             updateWidget: function (info) {
-                this.$store.commit(types.UPDATE_WIDGET, info)
+                this.$store.commit(MUTATION_TYPES.UPDATE_WIDGET, info)
+            },
+
+            generateCode: function () {
+                if (this.type === WIDGET_TYPES.BARCODE) {
+                    $(this.$el).children().JsBarcode(
+                        this.barcodeInfo.value, {
+                            width: 1,
+                            height: 30,
+                            displayValue: true,
+                            margin: 0,
+                            fontSize: 10,
+                            background: "#ffffff"
+                        })
+                } else if (this.type === WIDGET_TYPES.QR_CODE) {
+                    $(this.$el).children().qrcode({
+                        text: this.qrCodeInfo.value,
+                        width: 100,
+                        height: 100
+                    });
+                }
             }
+        },
+
+        updated: function () {
+            this.generateCode();
+        },
+
+        mounted: function () {
+            this.generateCode();
         }
     }
 </script>

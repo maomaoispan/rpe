@@ -17,7 +17,8 @@
 </template>
 
 <script>
-    import * as types from "../store/mutation-types"
+    import * as MUTATION_TYPES from "../store/mutationTypes"
+    import * as WIDGET_TYPES from "./WidgetTypes"
     import AppWidget from "./Widget.vue"
 
     module.exports = {
@@ -42,7 +43,7 @@
         methods: {
             pageClick: function (event) {
                 console.log("Page clicked!");
-                this.$store.commit(types.ACTIVE_WIDGET, null);
+                this.$store.commit(MUTATION_TYPES.ACTIVE_WIDGET, null);
 
             },
 
@@ -56,10 +57,17 @@
 
 <style>
 
+    #space {
+        float: left;
+        height: 300px;
+        width: calc(100% - 270px);
+        background-color: #929292;
+    }
+
     #page {
         border: 2px solid rgba(0, 0, 0, 0.18);
         margin: 10px;
-        background-color: #f6f6f6;
+        background-color: #ffffff;
         position: relative;
     }
 </style>

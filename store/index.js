@@ -16,23 +16,36 @@ const state = {
     widgets: [
         {
             id: "11",
-            type: "text",
+            type: "TEXT",
             left: 5,
             top: 5,
-            text: "产品名称：",
+            value: "产品名称：",
             font_family: "宋体",
             font_size: 16
         }, {
             id: "22",
-            type: "image",
+            type: "IMAGE",
             left: 120,
-            top: 30
+            top: 30,
+            src:"../assets/widget_image_background.jpg"
         }, {
             id: "33",
-            type: "text",
+            type: "TEXT",
             left: 5,
             top: 50,
-            text: "价格："
+            value: "价格："
+        }, {
+            id: "44",
+            type: "BARCODE",
+            left: 20,
+            top: 20,
+            value: "010101001"
+        }, {
+            id: "55",
+            type: "QR_CODE",
+            left: 20,
+            top: 20,
+            value: "XQZB9999"
         }
     ],
     activeWidget: null

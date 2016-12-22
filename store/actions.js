@@ -1,7 +1,7 @@
 /**
  * Created by Pan on 2016-12-16.
  */
-import * as types from "./mutation-types"
+import * as types from "./mutationTypes"
 
 
 export const addWidget = ({commit}, type) => {
@@ -9,7 +9,7 @@ export const addWidget = ({commit}, type) => {
         commit(types.ADD_WIDGET, type)
 
     }, 1000)
-    // commit(types.ADD_WIDGET, type)
+    // commit(MUTATION_TYPES.ADD_WIDGET, type)
 }
 
 export const editWidget = ({commit}, info) => {
