@@ -18,7 +18,7 @@
 
 <script>
     import * as MUTATION_TYPES from "../store/mutationTypes"
-    import * as WIDGET_TYPES from "./WidgetTypes"
+    import {WIDGET_TYPES} from "./Types"
     import AppWidget from "./Widget.vue"
 
     module.exports = {

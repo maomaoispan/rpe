@@ -2,46 +2,66 @@
  * Created by Pan on 2016-12-17.
  */
 import * as MUTATION_TYPES from "./mutationTypes"
-import * as WIDGET_TYPES from "../components/WidgetTypes"
+import {WIDGET_TYPES} from "../components/Types"
+import {IMAGE_DISPLAY_TYPES} from "../components/Types"
 import {set} from "vue"
 
 const mutations = {
     [MUTATION_TYPES.ADD_WIDGET] (state, type){
-        var _widget = {
-            id: (new Date()).getTime(),
-            left: 20,
-            top: 20,
-        };
+        var widget = null;
+
+        // var a = [1, 2, 3];
+        // var b = [...a, 4, 5, 6];
+        // console.log(b);
 
         switch (type) {
             case WIDGET_TYPES.TEXT:
-                _widget.type = WIDGET_TYPES.TEXT;
-                _widget.value = "New Content";
+                widget = {
+                    type: WIDGET_TYPES.TEXT,
+                    value: "New Content",
+                    fontFamily: "宋体",
+                    fontSize: 10,
+                    fontColor: "#000000"
+                }
                 break;
 
             case WIDGET_TYPES.IMAGE:
-                _widget.type = WIDGET_TYPES.IMAGE;
-                _widget.width = 100;
-                _widget.height = 60;
-                _widget.src = "../assets/default_image.jpg"
+                widget = {
+                    type: WIDGET_TYPES.IMAGE,
+                    width: 100,
+                    height: 60,
+                    displayMode: IMAGE_DISPLAY_TYPES.FIT_HEIGHT,
+                    src: "../assets/default_image.jpg"
+                }
+
                 break;
 
             case WIDGET_TYPES.BARCODE :
-                _widget.type = WIDGET_TYPES.BARCODE;
-                _widget.value = "999999999";
+                widget = {
+                    type: WIDGET_TYPES.BARCODE,
+                    value: "999999999",
+                }
                 break;
 
             case WIDGET_TYPES.QR_CODE:
-                _widget.type = WIDGET_TYPES.QR_CODE;
-                _widget.value = "久久";
+                widget = {
+                    type: WIDGET_TYPES.QR_CODE,
+                    value: "888888888",
+                }
                 break;
 
             default:
                 break;
         }
 
-        state.widgets.push(_widget);
-        state.activeWidget = _widget;
+        if (widget !== null) {
+            widget.id = (new Date()).getTime();
+            widget.left = state.page.width * 0.3;
+            widget.top = state.page.height * 0.3;
+
+            state.widgets.push(widget);
+            state.activeWidget = widget;
+        }
     },
 
     [MUTATION_TYPES.UPDATE_WIDGET] (state, info){

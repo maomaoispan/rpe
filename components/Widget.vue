@@ -11,32 +11,46 @@
          @mouseup="mouseUp"
          @mousemove="mouseMove"
          @mouseout="mouseUp"
-         v-bind:style="{left:left, top:top}"
+         v-bind:style="{
+             left: left,
+             top: top
+         }"
     >
         <div draggable="false"
              v-if="type === WIDGET_TYPES.TEXT"
-             style="display: inline;">{{textInfo.value}}
+
+             v-bind:style="{
+                 fontFamily: textInfo.fontFamily,
+                 fontSize: textInfo.fontSize + 'px',
+                 color: textInfo.fontColor
+            }">
+            {{ textInfo.value }}
         </div>
 
         <img draggable="false"
              v-if="type === WIDGET_TYPES.IMAGE"
-             style="display: inline;"
-             v-bind:src="imageInfo.src">
+             v-bind:src="imageInfo.src"
+             v-bind:style="{
+             width:  imageInfo.displayMode === IMAGE_DISPLAY_MODE.FIT_HEIGHT ? 'auto' : imageInfo.width + 'px',
+             height: imageInfo.displayMode === IMAGE_DISPLAY_MODE.FIT_WIDTH ? 'auto' : imageInfo.height + 'px'
+             }"
+        >
 
         <canvas draggable="false"
                 v-if="type === WIDGET_TYPES.BARCODE"
-                style="display: inline;"></canvas>
+        ></canvas>
 
         <canvas draggable="false"
                 v-if="type === WIDGET_TYPES.QR_CODE"
-                style="display: inline"></canvas>
+        ></canvas>
 
     </div>
 </template>
 
 <script>
     import  * as MUTATION_TYPES from "../store/mutationTypes"
-    import  * as WIDGET_TYPES from "./WidgetTypes"
+    import  {WIDGET_TYPES} from "./Types"
+    import  {IMAGE_DISPLAY_TYPES}  from "./Types"
 
     export default{
 
@@ -49,6 +63,7 @@
 
             return {
                 WIDGET_TYPES: WIDGET_TYPES,
+                IMAGE_DISPLAY_MODE: IMAGE_DISPLAY_TYPES,
                 tempLeft: 20,
                 tempTop: 20,
                 isDown: false,
@@ -81,7 +96,10 @@
             textInfo: function () {
                 if (this.type === WIDGET_TYPES.TEXT) {
                     return {
-                        value: this.widget.value
+                        value: this.widget.value,
+                        fontFamily: this.widget.fontFamily,
+                        fontSize: this.widget.fontSize,
+                        fontColor: this.widget.fontColor,
                     }
                 }
             },
@@ -89,6 +107,9 @@
             imageInfo: function () {
                 if (this.type === WIDGET_TYPES.IMAGE) {
                     return {
+                        width: this.widget.width,
+                        height: this.widget.height,
+                        displayMode: this.widget.displayMode,
                         src: this.widget.src
                     }
                 }
@@ -202,6 +223,7 @@
         display: inline;
         margin: 0;
         position: absolute;
+        line-height: 1.0;
     }
 
     .widget_selected {

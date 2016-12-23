@@ -15,35 +15,60 @@ const state = {
     },
     widgets: [
         {
-            id: "11",
             type: "TEXT",
+            id: "11",
             left: 5,
             top: 5,
             value: "产品名称：",
-            font_family: "宋体",
-            font_size: 16
+            fontFamily: "幼圆",
+            fontSize: 20,
+            fontColor: "#ff3b00"
         }, {
-            id: "22",
             type: "IMAGE",
+            id: "22",
             left: 120,
             top: 30,
-            src:"../assets/widget_image_background.jpg"
+            width: 200,
+            height: 160,
+            src: "../assets/widget_image_background.jpg",
+            displayMode: "FIT_WIDTH"
         }, {
-            id: "33",
+            type: "IMAGE",
+            id: "322",
+            left: 120,
+            top: 30,
+            width: 80,
+            height: 160,
+            src: "../assets/widget_image_background.jpg",
+            displayMode: "FIT_HEIGHT"
+        }, {
+            type: "IMAGE",
+            id: "3232",
+            left: 120,
+            top: 30,
+            width: 100,
+            height: 20,
+            src: "../assets/widget_image_background.jpg",
+            displayMode: "STRETCH"
+        }, {
             type: "TEXT",
-            left: 5,
+            id: "33",
+            left: 55,
             top: 50,
-            value: "价格："
+            value: "价格：",
+            fontFamily: "楷体",
+            fontSize: 10,
+            fontColor: "#9484ff"
         }, {
-            id: "44",
             type: "BARCODE",
-            left: 20,
+            id: "44",
+            left: 180,
             top: 20,
             value: "010101001"
         }, {
-            id: "55",
             type: "QR_CODE",
-            left: 20,
+            id: "55",
+            left: 260,
             top: 20,
             value: "XQZB9999"
         }

@@ -19,6 +19,7 @@
     #file > .content > iframe {
         width: 100%;
         height: 100%;
+        /*font-family: 文鼎霹雳体;*/
     }
 
     #file > .content {
