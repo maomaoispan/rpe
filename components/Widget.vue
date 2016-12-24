@@ -12,27 +12,29 @@
          @mousemove="mouseMove"
          @mouseout="mouseUp"
          v-bind:style="{
-             left: left,
-             top: top
+             left: left + 'px',
+             top: top + 'px'
          }"
     >
         <div draggable="false"
              v-if="type === WIDGET_TYPES.TEXT"
 
              v-bind:style="{
-                 fontFamily: textInfo.fontFamily,
-                 fontSize: textInfo.fontSize + 'px',
-                 color: textInfo.fontColor
+                 fontFamily: widget.fontFamily,
+                 fontSize: widget.fontSize + 'px',
+                 color: widget.fontColor,
+                 fontWeight: widget.fontWeight,
+                 fontStyle: widget.fontStyle
             }">
-            {{ textInfo.value }}
+            {{ this.widget.value }}
         </div>
 
         <img draggable="false"
              v-if="type === WIDGET_TYPES.IMAGE"
-             v-bind:src="imageInfo.src"
+             v-bind:src="widget.src"
              v-bind:style="{
-             width:  imageInfo.displayMode === IMAGE_DISPLAY_MODE.FIT_HEIGHT ? 'auto' : imageInfo.width + 'px',
-             height: imageInfo.displayMode === IMAGE_DISPLAY_MODE.FIT_WIDTH ? 'auto' : imageInfo.height + 'px'
+             width:  widget.displayMode === IMAGE_DISPLAY_MODE.FIT_HEIGHT.value ? 'auto' : widget.width + 'px',
+             height: widget.displayMode === IMAGE_DISPLAY_MODE.FIT_WIDTH.value ? 'auto' : widget.height + 'px'
              }"
         >
 
@@ -50,7 +52,7 @@
 <script>
     import  * as MUTATION_TYPES from "../store/mutationTypes"
     import  {WIDGET_TYPES} from "./Types"
-    import  {IMAGE_DISPLAY_TYPES}  from "./Types"
+    import  {IMAGE_DISPLAY_MODE}  from "./Types"
 
     export default{
 
@@ -63,7 +65,7 @@
 
             return {
                 WIDGET_TYPES: WIDGET_TYPES,
-                IMAGE_DISPLAY_MODE: IMAGE_DISPLAY_TYPES,
+                IMAGE_DISPLAY_MODE: IMAGE_DISPLAY_MODE,
                 tempLeft: 20,
                 tempTop: 20,
                 isDown: false,
@@ -86,39 +88,22 @@
             },
 
             left: function () {
-                return this.widget.left + "px";
+                return this.widget.left;
             },
 
             top: function () {
-                return this.widget.top + "px";
-            },
-
-            textInfo: function () {
-                if (this.type === WIDGET_TYPES.TEXT) {
-                    return {
-                        value: this.widget.value,
-                        fontFamily: this.widget.fontFamily,
-                        fontSize: this.widget.fontSize,
-                        fontColor: this.widget.fontColor,
-                    }
-                }
-            },
-
-            imageInfo: function () {
-                if (this.type === WIDGET_TYPES.IMAGE) {
-                    return {
-                        width: this.widget.width,
-                        height: this.widget.height,
-                        displayMode: this.widget.displayMode,
-                        src: this.widget.src
-                    }
-                }
+                return this.widget.top;
             },
 
             barcodeInfo: function () {
                 if (this.type === WIDGET_TYPES.BARCODE) {
                     return {
-                        value: this.widget.value
+                        value: this.widget.value,
+                        displayValue: this.widget.displayValue,
+                        width: this.widget.width,
+                        height: this.widget.height,
+                        fontSize: this.widget.fontSize,
+                        background: this.widget.background
                     }
                 }
             },
@@ -182,21 +167,40 @@
             },
 
             generateCode: function () {
+                console.log("------------------------------redraw code");
+                let value = "";
+
                 if (this.type === WIDGET_TYPES.BARCODE) {
+                    value = this.widget.value === '' ? "At least 1 characters" : this.widget.value;
                     $(this.$el).children().JsBarcode(
-                        this.barcodeInfo.value, {
-                            width: 1,
-                            height: 30,
-                            displayValue: true,
+                        value, {
+                            displayValue: this.widget.displayValue,
+                            width: this.widget.width,
+                            height: this.widget.height,
+                            text: this.widget.text,
+                            fontOptions: this.widget.fontOptions,
+                            font: this.widget.font,
+                            fontSize: this.widget.fontSize,
+                            textAlign: this.widget.textAlign,
+                            textPosition: this.widget.textPosition,
+                            textMargin: this.widget.textMargin,
+                            background: this.widget.background,
+                            lineColor: this.widget.lineColor,
                             margin: 0,
-                            fontSize: 10,
-                            background: "#ffffff"
+                            marginTop: parseInt(this.widget.marginTop),
+                            marginBottom: parseInt(this.widget.marginBottom),
+                            marginLeft: parseInt(this.widget.marginLeft),
+                            marginRight: parseInt(this.widget.marginRight)
                         })
                 } else if (this.type === WIDGET_TYPES.QR_CODE) {
+                    value = this.widget.value === '' ? "At least 1 characters" : this.widget.value;
+
                     $(this.$el).children().qrcode({
-                        text: this.qrCodeInfo.value,
-                        width: 100,
-                        height: 100
+                        text: value,
+                        width: this.widget.width,
+                        height: this.widget.height,
+                        background: this.widget.background,
+                        foreground: this.widget.foreground
                     });
                 }
             }

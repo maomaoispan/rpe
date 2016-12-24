@@ -2,8 +2,8 @@
  * Created by Pan on 2016-12-17.
  */
 import * as MUTATION_TYPES from "./mutationTypes"
-import {WIDGET_TYPES} from "../components/Types"
-import {IMAGE_DISPLAY_TYPES} from "../components/Types"
+import * as TYPES from "../components/Types"
+import {IMAGE_DISPLAY_MODE} from "../components/Types"
 import {set} from "vue"
 
 const mutations = {
@@ -15,38 +15,60 @@ const mutations = {
         // console.log(b);
 
         switch (type) {
-            case WIDGET_TYPES.TEXT:
+            case TYPES.WIDGET_TYPES.TEXT:
                 widget = {
-                    type: WIDGET_TYPES.TEXT,
+                    type: TYPES.WIDGET_TYPES.TEXT,
                     value: "New Content",
-                    fontFamily: "宋体",
-                    fontSize: 10,
-                    fontColor: "#000000"
+                    fontFamily: TYPES.FONT_FAMILY.SUN_TI.value,
+                    fontSize: 20,
+                    fontColor: "#000000",
+                    fontWeight: TYPES.FONT_WEIGHT.BOLD.value,
+                    fontStyle: TYPES.FONT_STYLE.OBLIQUE.value
                 }
                 break;
 
-            case WIDGET_TYPES.IMAGE:
+            case TYPES.WIDGET_TYPES.IMAGE:
                 widget = {
-                    type: WIDGET_TYPES.IMAGE,
+                    type: TYPES.WIDGET_TYPES.IMAGE,
                     width: 100,
                     height: 60,
-                    displayMode: IMAGE_DISPLAY_TYPES.FIT_HEIGHT,
+                    displayMode: IMAGE_DISPLAY_MODE.FIT_HEIGHT.value,
                     src: "../assets/default_image.jpg"
                 }
 
                 break;
 
-            case WIDGET_TYPES.BARCODE :
+            case TYPES.WIDGET_TYPES.BARCODE :
                 widget = {
-                    type: WIDGET_TYPES.BARCODE,
+                    type: TYPES.WIDGET_TYPES.BARCODE,
                     value: "999999999",
+                    displayValue: true,
+                    width: 1,
+                    height: 30,
+                    text: "",
+                    fontOptions: TYPES.BARCODE_FONT_OPTIONS.NONE.value,
+                    font: TYPES.FONT_FAMILY.SUN_TI.value,
+                    fontSize: 20,
+                    textAlign: TYPES.BARCODE_TEXT_ALIGN.CENTER.value,
+                    textPosition: TYPES.BARCODE_TEXT_POSITION.BOTTOM.value,
+                    textMargin: 10,
+                    background: "#FFFFFF",
+                    lineColor: "#000000",
+                    marginTop: 10,
+                    marginBottom: 10,
+                    marginLeft: 10,
+                    marginRight: 10
                 }
                 break;
 
-            case WIDGET_TYPES.QR_CODE:
+            case TYPES.WIDGET_TYPES.QR_CODE:
                 widget = {
-                    type: WIDGET_TYPES.QR_CODE,
+                    type: TYPES.WIDGET_TYPES.QR_CODE,
                     value: "888888888",
+                    width: 100,
+                    height: 100,
+                    background: "#FFFFFF",
+                    foreground: "#000000"
                 }
                 break;
 

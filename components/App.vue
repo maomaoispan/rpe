@@ -75,14 +75,6 @@
         background-color: #7c7a79;
     }
 
-    #property-bar {
-        top: 35px;
-        right: 0;
-        height: calc(100% - 70px);
-        width: 200px;
-        background-color: #eaeaec;
-        position: absolute;
-    }
 
     #footer {
         left: 0;
