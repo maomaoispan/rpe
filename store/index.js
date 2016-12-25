@@ -7,6 +7,7 @@ import * as actions from "./actions"
 import mutations from "./mutations"
 import * as TYPES from "../components/Types"
 
+
 Vue.use(Vuex)
 
 const state = {
@@ -42,7 +43,7 @@ const state = {
             zIndex: 20,
             width: 200,
             height: 160,
-            src: "../assets/widget_image_background.jpg",
+            src: "../assets/XiQiJwelry.png",
             displayMode: TYPES.IMAGE_DISPLAY_MODE.FIT_HEIGHT.value
         }, {
             type: "IMAGE",
@@ -54,7 +55,7 @@ const state = {
             width: 80,
             height: 160,
             zIndex: 150,
-            src: "../assets/widget_image_background.jpg",
+            src: "../assets/JuDianTech.png",
             displayMode: TYPES.IMAGE_DISPLAY_MODE.FIT_WIDTH.value
         }, {
             type: "IMAGE",
@@ -66,7 +67,7 @@ const state = {
             zIndex: 10,
             width: 100,
             height: 20,
-            src: "../assets/widget_image_background.jpg",
+            src: "../assets/ByeaseTech.png",
             displayMode: TYPES.IMAGE_DISPLAY_MODE.STRETCH.value
         }, {
             type: "TEXT",
@@ -122,7 +123,15 @@ const state = {
             foreground: "#000000"
         }
     ],
-    activeWidget: null
+    activeWidget: null,
+
+    imageList: [
+        {src: "../assets/ByeaseTech.png", name: "Byease Tech"},
+        {src: "../assets/JuDianTech.png", name: "Ju Dian Tech"},
+        {src: "../assets/XiQiJwelry.png", name: "XiQi Jwelry"},
+        {src: "../assets/Vue.png", name: "Vuejs"}
+    ],
+    dataBase: []
 }
 
 export default new Vuex.Store({
@@ -134,11 +143,13 @@ export default new Vuex.Store({
         widgets: state => state.widgets,
         activeWidget: state => state.activeWidget,
         maxLeft: state => {
-            return state.page.width - state.activeWidget.contentWidth / state.config.pageScale;
+            return Math.round(state.page.width - state.activeWidget.contentWidth / state.config.pageScale);
         },
         maxTop: state => {
-            return state.page.height - state.activeWidget.contentHeight / state.config.pageScale;
-        }
+            return Math.round(state.page.height - state.activeWidget.contentHeight / state.config.pageScale);
+        },
+        imageList: state => state.imageList,
+        dataBase: state => state.dataBase
     },
     mutations
 })

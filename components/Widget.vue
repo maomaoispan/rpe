@@ -150,8 +150,12 @@
                 var target = event.target.parentNode;
 
                 if (this.isDown) {
-                    var newLeft = this.tempLeft + ( parseFloat(event.clientX) - parseFloat(this.moveStartX)) / this.pageScale;
-                    var newTop = this.tempTop + (parseFloat(event.clientY) - parseFloat(this.moveStartY)) / this.pageScale;
+                    $(event.target).css({
+                        cursor: "move"
+                    });
+
+                    var newLeft = Math.round(this.tempLeft + ( parseFloat(event.clientX) - parseFloat(this.moveStartX)) / this.pageScale);
+                    var newTop = Math.round(this.tempTop + (parseFloat(event.clientY) - parseFloat(this.moveStartY)) / this.pageScale);
 
                     if (newLeft < 0) {
                         newLeft = 0;
@@ -172,6 +176,9 @@
             mouseUp: function (event) {
                 if (this.isDown) {
                     this.isDown = false;
+                    $(event.target).css({
+                        cursor: "default"
+                    });
                 }
             },
 
@@ -239,7 +246,6 @@
         box-shadow: #3ce238 0px 0px 15px;
         outline: #33ff04 solid 2px;
         outline-offset: 2px;
-        cursor: move;
     }
 
     .widget {

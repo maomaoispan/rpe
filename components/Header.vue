@@ -2,7 +2,7 @@
 
 
     <div id="header">
-        <h6>List Printer</h6>
+        <h6>Rapid Label</h6>
     </div>
 </template>
 

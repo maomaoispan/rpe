@@ -4,7 +4,7 @@
 
 <template>
     <div id="file">
-        <div class="title">File</div>
+        <div class="title">PDF File</div>
         <div class="content">
             <!--<iframe src="http://m.oschina.net"></iframe>-->
             <iframe ></iframe>

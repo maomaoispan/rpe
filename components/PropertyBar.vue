@@ -11,20 +11,22 @@
                 <fieldset class="form-group">
                     <label>Left</label>
                     <input type="number"
+                           min=0
                            class="form-control form-control-sm"
                            id="widget-left"
                            placeholder="widget left"
-                           v-bind="{ value: activeWidget.left }"
+                           v-bind="{ value: activeWidget.left, max:this.$store.getters.maxLeft +1 }"
                            @input="updateWidget({ left: $event.target.value })">
                 </fieldset>
 
                 <fieldset class="form-group">
                     <label>Top</label>
                     <input type="number"
+                           min=0
                            class="form-control form-control-sm"
                            id="widget-top"
                            placeholder="widget top"
-                           v-bind="{ value: activeWidget.top }"
+                           v-bind="{ value: activeWidget.top, max:this.$store.getters.maxTop +1 }"
                            @input="updateWidget({ top: $event.target.value })">
                 </fieldset>
 
@@ -140,15 +142,12 @@
 
                     <fieldset class="form-group">
                         <label>File</label>
-                        <div class="input-group">
-                            <input type="file"
-                                   class="form-control form-control-sm"
-                                   id="image-file"
-                                   placeholder="Please select an image file">
-                            <div class="input-group-addon">
-                                <button>Update</button>
-                            </div>
-                        </div>
+                        <select class="form-control"
+                                v-bind="{ value: activeWidget.src }"
+                                @change="updateWidget({ src: $event.target.value })"
+                        >
+                            <option v-for="item in imageList" v-bind="{ value: item.src }">{{ item.name }}</option>
+                        </select>
                     </fieldset>
                 </div>
 
@@ -166,7 +165,7 @@
                     </fieldset>
 
                     <fieldset class="form-group">
-                        <label>Width</label>
+                        <label>Line Width</label>
                         <input type="number"
                                min=1
                                class="form-control form-control-sm"
@@ -413,7 +412,7 @@
                 IMAGE_DISPLAY_MODE: TYPES.IMAGE_DISPLAY_MODE,
                 BARCODE_FONT_OPTIONS: TYPES.BARCODE_FONT_OPTIONS,
                 BARCODE_TEXT_ALIGN: TYPES.BARCODE_TEXT_ALIGN,
-                BARCODE_TEXT_POSITION: TYPES.BARCODE_TEXT_POSITION
+                BARCODE_TEXT_POSITION: TYPES.BARCODE_TEXT_POSITION,
             }
         },
         computed: {
@@ -423,6 +422,10 @@
 
             activeWidget: function () {
                 return this.$store.getters.activeWidget;
+            },
+
+            imageList:function () {
+                return this.$store.getters.imageList;
             }
         },
         methods: {
