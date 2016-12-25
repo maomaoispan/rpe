@@ -26,4 +26,12 @@
         overflow: hidden;
         height: calc(100% - 30px);
     }
+
+
+    #file {
+        float: left;
+        height: calc(100% - 470px);
+        width: calc(100% - 270px);
+        background-color: #7c7a79;
+    }
 </style>

@@ -10,10 +10,6 @@ const mutations = {
     [MUTATION_TYPES.ADD_WIDGET] (state, type){
         var widget = null;
 
-        // var a = [1, 2, 3];
-        // var b = [...a, 4, 5, 6];
-        // console.log(b);
-
         switch (type) {
             case TYPES.WIDGET_TYPES.TEXT:
                 widget = {
@@ -80,6 +76,9 @@ const mutations = {
             widget.id = (new Date()).getTime();
             widget.left = state.page.width * 0.3;
             widget.top = state.page.height * 0.3;
+            widget.contentWidth = 0;
+            widget.contentHeight = 0;
+            widget.zIndex = 0;
 
             state.widgets.push(widget);
             state.activeWidget = widget;
@@ -87,20 +86,20 @@ const mutations = {
     },
 
     [MUTATION_TYPES.UPDATE_WIDGET] (state, info){
-        var _info = Object.keys(info)
+        var _info = Object.keys(info);
+
         for (let item of _info) {
-            state.activeWidget[item] = info[item]
+            if(state.activeWidget && state.activeWidget.hasOwnProperty(item)){
+                state.activeWidget[item] = info[item];
+            }
         }
     },
 
     [MUTATION_TYPES.DELETE_WIDGET] (state){
         let index = state.widgets.indexOf(state.activeWidget);
-        console.log("index:" + index);
-        console.log(state.widgets);
         state.widgets.splice(index, 1);
         state.activeWidget = state.widgets[0];
         console.log(state.widgets);
-
     },
 
     [MUTATION_TYPES.ACTIVE_WIDGET](state, id){
@@ -118,13 +117,24 @@ const mutations = {
 
     [MUTATION_TYPES.UPDATE_PAGE](state, info){
         var _info = Object.keys(info);
+
         for (let item of _info) {
-            state.page[item] = info[item];
+            if (state.page.hasOwnProperty(item)) {
+                state.page[item] = info[item];
+            }
+        }
+    },
+
+    [MUTATION_TYPES.CONFIG_UPDATE](state, info){
+        var _info = Object.keys(info);
+
+        for (let item of _info) {
+            if (state.config.hasOwnProperty(item)) {
+                state.config[item] = info[item];
+            }
         }
     }
 }
 
-function activeWidgetById(state, id) {
-}
 
 export  default mutations

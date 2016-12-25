@@ -13,19 +13,21 @@
          @mouseout="mouseUp"
          v-bind:style="{
              left: left + 'px',
-             top: top + 'px'
+             top: top + 'px',
+             zIndex: zIndex
          }"
     >
         <div draggable="false"
              v-if="type === WIDGET_TYPES.TEXT"
-
              v-bind:style="{
                  fontFamily: widget.fontFamily,
                  fontSize: widget.fontSize + 'px',
                  color: widget.fontColor,
                  fontWeight: widget.fontWeight,
                  fontStyle: widget.fontStyle
-            }">
+            }"
+
+        >
             {{ this.widget.value }}
         </div>
 
@@ -75,6 +77,9 @@
         },
 
         computed: {
+            pageScale: function () {
+                return this.$store.getters.config.pageScale;
+            },
 
             widget: function () {
                 var widgets = this.$store.getters.widgets;
@@ -93,6 +98,10 @@
 
             top: function () {
                 return this.widget.top;
+            },
+
+            zIndex: function () {
+                return this.widget.zIndex;
             },
 
             barcodeInfo: function () {
@@ -129,7 +138,6 @@
         methods: {
 
             mouseDown: function (event) {
-                console.log("widget clicked");
                 this.$store.commit(MUTATION_TYPES.ACTIVE_WIDGET, this.id);
                 this.tempLeft = parseFloat(event.target.parentNode.style.left);
                 this.tempTop = parseFloat(event.target.parentNode.style.top);
@@ -142,14 +150,19 @@
                 var target = event.target.parentNode;
 
                 if (this.isDown) {
-                    var newLeft = this.tempLeft + parseFloat(event.clientX) - parseFloat(this.moveStartX);
-                    var newTop = this.tempTop + parseFloat(event.clientY) - parseFloat(this.moveStartY);
+                    var newLeft = this.tempLeft + ( parseFloat(event.clientX) - parseFloat(this.moveStartX)) / this.pageScale;
+                    var newTop = this.tempTop + (parseFloat(event.clientY) - parseFloat(this.moveStartY)) / this.pageScale;
 
                     if (newLeft < 0) {
                         newLeft = 0;
+                    } else if (newLeft > this.$store.getters.maxLeft) {
+                        newLeft = this.$store.getters.maxLeft;
                     }
+
                     if (newTop < 0) {
                         newTop = 0;
+                    } else if (newTop > this.$store.getters.maxTop) {
+                        newTop = this.$store.getters.maxTop;
                     }
 
                     this.$store.commit(MUTATION_TYPES.UPDATE_WIDGET, {left: newLeft, top: newTop});
@@ -167,7 +180,6 @@
             },
 
             generateCode: function () {
-                console.log("------------------------------redraw code");
                 let value = "";
 
                 if (this.type === WIDGET_TYPES.BARCODE) {
@@ -207,6 +219,11 @@
         },
 
         updated: function () {
+            this.$store.commit(MUTATION_TYPES.UPDATE_WIDGET, {
+                contentWidth: $(this.$el).width(),
+                contentHeight: $(this.$el).height()
+            });
+
             this.generateCode();
         },
 
@@ -219,7 +236,9 @@
 <style>
 
     .widget :hover {
-        box-shadow: #e2e2e2 0px 0px 15px;
+        box-shadow: #3ce238 0px 0px 15px;
+        outline: #33ff04 solid 2px;
+        outline-offset: 2px;
         cursor: move;
     }
 
@@ -231,7 +250,9 @@
     }
 
     .widget_selected {
-        box-shadow: #ff3b00 0 0 5px;
+        box-shadow: rgba(255, 0, 0, 0.51) 0px 0px 28px;
+        outline: red solid 2px;
+        outline-offset: 4px;
     }
 
 </style>

@@ -9,4 +9,13 @@
 
 <style>
 
+    #footer {
+        left: 0;
+        bottom: 0;
+        height: 35px;
+        width: 100%;
+        background-color: #c0c0c0;
+        position: absolute;
+    }
+
 </style>

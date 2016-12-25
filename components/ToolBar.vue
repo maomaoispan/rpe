@@ -59,6 +59,14 @@
 
 <style>
 
+
+    #tool-bar {
+        float: left;
+        width: 70px;
+        height: calc(100% - 70px);
+        background-color: #eaeaec;
+    }
+
     #addWidgetText, #addWidgetImage, #addWidgetBarcode, #addWidgetQRCode {
         margin: 8px;
         border: 2px solid #797979;

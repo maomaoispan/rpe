@@ -10,9 +10,12 @@ import * as TYPES from "../components/Types"
 Vue.use(Vuex)
 
 const state = {
+    config: {
+        pageScale: 1
+    },
     page: {
-        width: 360,
-        height: 200
+        width: 560,
+        height: 300
     },
     widgets: [
         {
@@ -20,6 +23,9 @@ const state = {
             id: "11",
             left: 5,
             top: 5,
+            contentWidth: 0,
+            contentHeight: 0,
+            zIndex: 1110,
             value: "产品名称：",
             fontFamily: "幼圆",
             fontSize: 20,
@@ -31,6 +37,9 @@ const state = {
             id: "22",
             left: 120,
             top: 30,
+            contentWidth: 0,
+            contentHeight: 0,
+            zIndex: 20,
             width: 200,
             height: 160,
             src: "../assets/widget_image_background.jpg",
@@ -40,8 +49,11 @@ const state = {
             id: "322",
             left: 120,
             top: 30,
+            contentWidth: 0,
+            contentHeight: 0,
             width: 80,
             height: 160,
+            zIndex: 150,
             src: "../assets/widget_image_background.jpg",
             displayMode: TYPES.IMAGE_DISPLAY_MODE.FIT_WIDTH.value
         }, {
@@ -49,6 +61,9 @@ const state = {
             id: "3232",
             left: 120,
             top: 30,
+            contentWidth: 0,
+            contentHeight: 0,
+            zIndex: 10,
             width: 100,
             height: 20,
             src: "../assets/widget_image_background.jpg",
@@ -58,6 +73,9 @@ const state = {
             id: "33",
             left: 55,
             top: 50,
+            contentWidth: 0,
+            contentHeight: 0,
+            zIndex: 10,
             value: "价格：",
             fontFamily: "楷体",
             fontSize: 10,
@@ -69,6 +87,9 @@ const state = {
             type: "BARCODE",
             left: 180,
             top: 20,
+            contentWidth: 0,
+            contentHeight: 0,
+            zIndex: 10,
             value: "010101001",
             displayValue: true,
             width: 1,
@@ -91,6 +112,9 @@ const state = {
             id: "55",
             left: 260,
             top: 20,
+            contentWidth: 0,
+            contentHeight: 0,
+            zIndex: 10,
             value: "JiuFuJiuJiu",
             width: 100,
             height: 100,
@@ -105,9 +129,16 @@ export default new Vuex.Store({
     state,
     actions,
     getters: {
+        config: state => state.config,
         page: state => state.page,
         widgets: state => state.widgets,
         activeWidget: state => state.activeWidget,
+        maxLeft: state => {
+            return state.page.width - state.activeWidget.contentWidth / state.config.pageScale;
+        },
+        maxTop: state => {
+            return state.page.height - state.activeWidget.contentHeight / state.config.pageScale;
+        }
     },
     mutations
 })

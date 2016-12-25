@@ -28,6 +28,14 @@
                            @input="updateWidget({ top: $event.target.value })">
                 </fieldset>
 
+                <fieldset class="form-group">
+                    <label>Z index</label>
+                    <input type="number"
+                    class="form-control form-control-sm"
+                           v-bind="{ value:activeWidget.zIndex }"
+                           @input="updateWidget({ zIndex: $event.target.value })"
+                    >
+                </fieldset>
 
                 <!-- Text -->
                 <div v-if="activeWidget.type === WIDGET_TYPES.TEXT">

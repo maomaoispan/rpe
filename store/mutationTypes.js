@@ -9,3 +9,6 @@ export const ACTIVE_WIDGET = "ACTIVE_WIDGET"
 
 
 export const UPDATE_PAGE = "UPDATE_PAGE"
+
+
+export const CONFIG_UPDATE = "CONFIG_UPDATE"
