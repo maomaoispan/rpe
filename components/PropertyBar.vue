@@ -101,13 +101,7 @@
                         >
                     </fieldset>
 
-                    <fieldset class="form-group">
-                        <label>Data</label>
-                        <select class="form-control form-control-sm">
-                            <option value="">None</option>
-                            <option v-for="item in dataFile.index" v-bind="{ value: item.id }">{{ item.name }}</option>
-                        </select>
-                    </fieldset>
+
                 </div>
 
 
@@ -372,11 +366,25 @@
                     </fieldset>
                 </div>
 
+                <!-- Data Bind -->
+                <fieldset v-if="haveBindData" class="form-group">
+                    <label>Data</label>
+                    <select class="form-control form-control-sm"
+                            v-bind="{ value: activeWidget.dataId }"
+                            @change="updateWidget({ dataId: $event.target.value })"
+                    >
+                        <option value="">None</option>
+                        <option v-for="item in dataFile.index" v-bind="{ value: item.id }">{{ item.name }}</option>
+                    </select>
+                </fieldset>
+
                 <!-- Delete Button -->
                 <hr/>
                 <button class="btn btn-danger btn-block"
                         @click="deleteWidget">Delete
                 </button>
+
+
             </div>
 
             <div v-else>
@@ -471,6 +479,16 @@
                 }
 
                 return {index: [], content: []};
+            },
+
+            haveBindData: function () {
+                if (this.activeWidget.type === TYPES.WIDGET_TYPES.TEXT ||
+                    this.activeWidget.type === TYPES.WIDGET_TYPES.BARCODE ||
+                    this.activeWidget.type === TYPES.WIDGET_TYPES.QR_CODE) {
+
+                    return true;
+                }
+                return false;
             }
         },
         methods: {

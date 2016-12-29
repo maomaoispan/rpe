@@ -28,7 +28,7 @@
             }"
 
         >
-            {{ this.widget.value }}
+            {{ value }}
         </div>
 
         <img draggable="false"
@@ -77,6 +77,19 @@
         },
 
         computed: {
+            value: function () {
+                let dataId = this.widget.dataId,
+                    value;
+
+                if (dataId === "") {
+                    value = this.widget.value;
+                } else {
+                    value = this.getBindValue(this.widget.dataId);
+                }
+
+                return value;
+            },
+
             pageScale: function () {
                 return this.$store.getters.config.pageScale;
             },
@@ -187,33 +200,45 @@
             },
 
             generateCode: function () {
-                let value = "";
+                let value = "",
+                    dataId = "";
+
+                if (this.type === WIDGET_TYPES.BARCODE || this.type === WIDGET_TYPES.QR_CODE) {
+                    dataId = this.widget.dataId;
+
+                    if (dataId === "") {
+                        value = this.widget.value === '' ? "At least 1 characters" : this.widget.value;
+                    } else {
+                        value = this.getBindValue(this.widget.dataId);
+                    }
+                }
 
                 if (this.type === WIDGET_TYPES.BARCODE) {
-                    value = this.widget.value === '' ? "At least 1 characters" : this.widget.value;
-                    $(this.$el).children().JsBarcode(
-                        value, {
-                            displayValue: this.widget.displayValue,
-                            width: this.widget.width,
-                            height: this.widget.height,
-                            text: this.widget.text,
-                            fontOptions: this.widget.fontOptions,
-                            font: this.widget.font,
-                            fontSize: this.widget.fontSize,
-                            textAlign: this.widget.textAlign,
-                            textPosition: this.widget.textPosition,
-                            textMargin: this.widget.textMargin,
-                            background: this.widget.background,
-                            lineColor: this.widget.lineColor,
-                            margin: 0,
-                            marginTop: parseInt(this.widget.marginTop),
-                            marginBottom: parseInt(this.widget.marginBottom),
-                            marginLeft: parseInt(this.widget.marginLeft),
-                            marginRight: parseInt(this.widget.marginRight)
-                        })
-                } else if (this.type === WIDGET_TYPES.QR_CODE) {
-                    value = this.widget.value === '' ? "At least 1 characters" : this.widget.value;
+                    var reg = /^[0-9a-zA-Z]*$/;
+                    if (reg.test(value)) {
+                        $(this.$el).children().JsBarcode(
+                            value, {
+                                displayValue: this.widget.displayValue,
+                                width: this.widget.width,
+                                height: this.widget.height,
+                                text: this.widget.text,
+                                fontOptions: this.widget.fontOptions,
+                                font: this.widget.font,
+                                fontSize: this.widget.fontSize,
+                                textAlign: this.widget.textAlign,
+                                textPosition: this.widget.textPosition,
+                                textMargin: this.widget.textMargin,
+                                background: this.widget.background,
+                                lineColor: this.widget.lineColor,
+                                margin: 0,
+                                marginTop: parseInt(this.widget.marginTop),
+                                marginBottom: parseInt(this.widget.marginBottom),
+                                marginLeft: parseInt(this.widget.marginLeft),
+                                marginRight: parseInt(this.widget.marginRight)
+                            })
+                    }
 
+                } else if (this.type === WIDGET_TYPES.QR_CODE) {
                     $(this.$el).children().qrcode({
                         text: value,
                         width: this.widget.width,
@@ -222,6 +247,29 @@
                         foreground: this.widget.foreground
                     });
                 }
+            },
+
+            getBindValue: function (dataId) {
+                let i = 0,
+                    j = 0,
+                    id = dataId,
+                    page = this.$store.getters.page,
+                    files = this.$store.getters.dataFiles,
+                    file;
+
+                for (i = 0; i < files.length; i++) {
+                    file = files[i];
+
+                    if (page.dataFile === file.src) {
+                        for (j = 0; j < file.index.length; j++) {
+                            if (file.index[j].id === id) {
+                                return file.content[0][j];
+                            }
+                        }
+                    }
+                }
+
+                return null;
             }
         },
 

@@ -34,7 +34,8 @@ const state = {
             fontSize: 20,
             fontColor: "#ff3b00",
             fontWeight: TYPES.FONT_WEIGHT.BOLD.value,
-            fontStyle: TYPES.FONT_STYLE.OBLIQUE.value
+            fontStyle: TYPES.FONT_STYLE.OBLIQUE.value,
+            dataId:""
         }, {
             type: "IMAGE",
             id: "22",
@@ -84,7 +85,8 @@ const state = {
             fontSize: 20,
             fontColor: "#9484ff",
             fontWeight: TYPES.FONT_WEIGHT.BOLD.value,
-            fontStyle: TYPES.FONT_STYLE.OBLIQUE.value
+            fontStyle: TYPES.FONT_STYLE.OBLIQUE.value,
+            dataId:""
         }, {
             id: "44",
             type: "BARCODE",
@@ -109,7 +111,8 @@ const state = {
             marginTop: 20,
             marginBottom: 20,
             marginLeft: 20,
-            marginRight: 20
+            marginRight: 20,
+            dataId:""
         }, {
             type: "QR_CODE",
             id: "55",
@@ -122,7 +125,8 @@ const state = {
             width: 100,
             height: 100,
             background: "#FFFFFF",
-            foreground: "#000000"
+            foreground: "#000000",
+            dataId:""
         }
     ],
     activeWidget: null,

@@ -120,7 +120,6 @@
 
             setPageScale: function (scale) {
                 let _scale = parseFloat(scale).toFixed(1);
-                console.log(_scale);
                 if (_scale >= 0.3 && _scale <= 2) {
                     this.$store.commit(MUTATION_TYPES.CONFIG_UPDATE, {pageScale: _scale});
                 }
@@ -187,6 +186,7 @@
                 this.pageTop = (contentHeight - pageHeight) / 2;
                 this.setPageScale(this.getFillScale());
             },
+
             save: function () {
                 this.$store.commit
             }

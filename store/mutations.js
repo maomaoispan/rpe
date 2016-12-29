@@ -19,7 +19,8 @@ const mutations = {
                     fontSize: 20,
                     fontColor: "#000000",
                     fontWeight: TYPES.FONT_WEIGHT.BOLD.value,
-                    fontStyle: TYPES.FONT_STYLE.OBLIQUE.value
+                    fontStyle: TYPES.FONT_STYLE.OBLIQUE.value,
+                    dataId:""
                 }
                 break;
 
@@ -53,7 +54,8 @@ const mutations = {
                     marginTop: 10,
                     marginBottom: 10,
                     marginLeft: 10,
-                    marginRight: 10
+                    marginRight: 10,
+                    dataId:""
                 }
                 break;
 
@@ -64,7 +66,8 @@ const mutations = {
                     width: 100,
                     height: 100,
                     background: "#FFFFFF",
-                    foreground: "#000000"
+                    foreground: "#000000",
+                    dataId:""
                 }
                 break;
 
@@ -84,7 +87,7 @@ const mutations = {
             widget.top = state.page.height * 0.3;
             widget.contentWidth = 0;
             widget.contentHeight = 0;
-            widget.zIndex = zIndex+1;
+            widget.zIndex = zIndex + 1;
 
             state.widgets.push(widget);
             state.activeWidget = widget;
@@ -95,7 +98,7 @@ const mutations = {
         var _info = Object.keys(info);
 
         for (let item of _info) {
-            if(state.activeWidget && state.activeWidget.hasOwnProperty(item)){
+            if (state.activeWidget && state.activeWidget.hasOwnProperty(item)) {
                 state.activeWidget[item] = info[item];
             }
         }
@@ -127,6 +130,15 @@ const mutations = {
         for (let item of _info) {
             if (state.page.hasOwnProperty(item)) {
                 state.page[item] = info[item];
+
+                if (item === "dataFile") {
+                    for (let w of state.widgets) {
+                        let dataId = "dataId";
+                        if (w.hasOwnProperty(dataId)) {
+                            w[dataId] = "";
+                        }
+                    }
+                }
             }
         }
     },
