@@ -33,7 +33,7 @@
                 <fieldset class="form-group">
                     <label>Z index</label>
                     <input type="number"
-                    class="form-control form-control-sm"
+                           class="form-control form-control-sm"
                            v-bind="{ value:activeWidget.zIndex }"
                            @input="updateWidget({ zIndex: $event.target.value })"
                     >
@@ -99,6 +99,14 @@
                                v-bind="{ value: activeWidget.value }"
                                @input="updateWidget({ value: $event.target.value })"
                         >
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <label>Data</label>
+                        <select class="form-control form-control-sm">
+                            <option value="">None</option>
+                            <option v-for="item in dataFile.index" v-bind="{ value: item.id }">{{ item.name }}</option>
+                        </select>
                     </fieldset>
                 </div>
 
@@ -391,6 +399,27 @@
                            @input="updatePage({ height: $event.target.value })">
                 </fieldset>
 
+                <fieldset class="form-group">
+                    <label>Background</label>
+                    <select class="form-control form-control-sm"
+                            v-bind="{ value: page.backgroundImage }"
+                            @change="updatePage({ backgroundImage: $event.target.value })"
+                    >
+                        <option value="">None</option>
+                        <option v-for="item in imageList" v-bind="{ value:item.src }">{{ item.name }}</option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label>Data</label>
+                    <select class="form-control form-control-sm"
+                            v-bind="{ value: page.dataFile}"
+                            @change="updatePage({ dataFile: $event.target.value })"
+                    >
+                        <option v-for="item in dataFiles" v-bind="{ value: item.src }">{{ item.name }}</option>
+                    </select>
+                </fieldset>
+
             </div>
         </div>
     </div>
@@ -424,8 +453,24 @@
                 return this.$store.getters.activeWidget;
             },
 
-            imageList:function () {
+            imageList: function () {
                 return this.$store.getters.imageList;
+            },
+
+            dataFiles: function () {
+                return this.$store.getters.dataFiles;
+            },
+
+            dataFile: function () {
+                let files = this.$store.getters.dataFiles;
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    if (file.src === this.page.dataFile) {
+                        return file;
+                    }
+                }
+
+                return {index: [], content: []};
             }
         },
         methods: {

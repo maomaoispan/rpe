@@ -73,12 +73,18 @@ const mutations = {
         }
 
         if (widget !== null) {
+            let zIndex = 0;
+            for (let i = 0; i < state.widgets.length; i++) {
+                let widget = state.widgets[i];
+                zIndex = zIndex < widget.zIndex ? widget.zIndex : zIndex;
+            }
+
             widget.id = (new Date()).getTime();
             widget.left = state.page.width * 0.3;
             widget.top = state.page.height * 0.3;
             widget.contentWidth = 0;
             widget.contentHeight = 0;
-            widget.zIndex = 0;
+            widget.zIndex = zIndex+1;
 
             state.widgets.push(widget);
             state.activeWidget = widget;

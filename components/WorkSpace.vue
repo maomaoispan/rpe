@@ -3,7 +3,14 @@
 */
 <template>
     <div id="work-space">
-        <div class="title">Work Space</div>
+        <div class="title">
+            Work Space
+            <button
+                    @click="save"
+            >
+                Save
+            </button>
+        </div>
         <div class="content"
              @mousewheel="mouseWheel"
              @click="pageClick"
@@ -13,8 +20,9 @@
                     width: pageWidth,
                     height: pageHeight,
                     transform: getPageScale,
-                    left:pageLeft + 'px',
-                    top:pageTop + 'px'
+                    left: pageLeft + 'px',
+                    top: pageTop + 'px',
+                    backgroundImage: 'url(' + page.backgroundImage + ')',
                  }"
                  @click="pageClick"
                  @mousedown="mouseDown"
@@ -63,6 +71,9 @@
         },
 
         computed: {
+            page: function () {
+                return this.$store.getters.page;
+            },
             widgets: function () {
                 return this.$store.getters.widgets;
             },
@@ -175,6 +186,9 @@
                 this.pageLeft = (contentWidth - pageWidth) / 2;
                 this.pageTop = (contentHeight - pageHeight) / 2;
                 this.setPageScale(this.getFillScale());
+            },
+            save: function () {
+                this.$store.commit
             }
         },
 
@@ -197,6 +211,7 @@
         height: 400px;
         width: calc(100% - 270px);
         background-color: #929292;
+
     }
 
     #work-space > .content {
@@ -211,6 +226,7 @@
         outline-offset: 4px;
         outline: #c3c3c3 dashed 3px;
         border-radius: 2px;
+        background-size: 100% 100%;
     }
 
     #space {
