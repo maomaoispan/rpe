@@ -4,7 +4,7 @@
 <template>
     <div id="tool-bar">
         <div class="title">
-            Tool
+            Widget
         </div>
         <div class="content">
             <div id="addWidgetText" @click="addWidget"></div>
@@ -61,18 +61,18 @@
 
 
     #tool-bar {
-        float: left;
         width: 70px;
-        height: calc(100% - 70px);
+        height: 100%;
         background-color: #eaeaec;
+        overflow: auto;
     }
 
     #addWidgetText, #addWidgetImage, #addWidgetBarcode, #addWidgetQRCode {
-        margin: 8px;
+        margin: 12px;
         border: 2px solid #797979;
         border-radius: 4px;
         padding: 1px;
-        height: 55px;
+        height: 48px;
         background-size: contain;
         /*cursor: pointer;;*/
     }
@@ -95,6 +95,14 @@
 
     #addWidgetQRCode {
         background-image: url("../assets/widget_qr_code_background.jpg");
+    }
+
+
+    .title {
+        height: 30px;
+        border: 1px solid #838383;
+        padding: 3px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
     }
 
 </style>

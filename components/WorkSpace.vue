@@ -3,58 +3,91 @@
 */
 <template>
     <div id="work-space">
-        <div class="title">
-            Work Space
-            <button
-                    @click="save"
-            >
-                Save
-            </button>
-        </div>
-        <div class="content"
-             @mousewheel="mouseWheel"
-             @click="pageClick"
-        >
-            <div id="page"
-                 v-bind:style="{
-                    width: pageWidth,
-                    height: pageHeight,
-                    transform: getPageScale,
-                    left: pageLeft + 'px',
-                    top: pageTop + 'px',
-                    backgroundImage: 'url(' + page.backgroundImage + ')',
-                 }"
-                 @click="pageClick"
-                 @mousedown="mouseDown"
-                 @mouseup="mouseUp"
-                 @mousemove="mouseMove"
-                 @mouseout="mouseUp"
+        <div id="editor-area">
+            <div id="editor-area-top-bar">
+                Work Space
+                <div class="btn-group btn-group-sm pull-right" role="group">
+                    <button type="button" class="btn btn-secondary">Left</button>
+                    <button type="button" class="btn btn-secondary">center</button>
+                    <button type="button" class="btn btn-secondary">right</button>
+                </div>
+            </div>
 
+            <div id="editor-area-center"
+                 @mousewheel="mouseWheel"
+                 @click="pageClick"
             >
-                <app-widget v-for="item in widgets"
-                            v-bind="{type: item.type, id: item.id}">
-                </app-widget>
+                <div id="page"
+                     v-bind:style="{
+                        width: pageWidth,
+                        height: pageHeight,
+                        transform: getPageScale,
+                        transformOrigin: transformOrigin.x +' ' + transformOrigin.y,
+                        left: pageLeft + 'px',
+                        top: pageTop + 'px',
+                        backgroundImage: 'url(' + page.backgroundImage + ')',
+                        }"
+                     @click="pageClick"
+                     @mousedown="mouseDown"
+                     @mouseup="mouseUp"
+                     @mousemove="mouseMove"
+                     @mouseout="mouseUp"
+
+                >
+                    <app-widget v-for="item in widgets"
+                                v-bind="{type: item.type, id: item.id}">
+                    </app-widget>
+                </div>
+            </div>
+
+            <div id="editor-area-bottom-bar">
+                <div class="pull-right">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-secondary" @click="setPageScale( parseFloat(pageScale) + 0.1 )">+
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <select @change="setPageScale( $event.target.value )"
+                                v-bind="{ value: pageScale }"
+                                style="
+                            border-radius: 3px;
+                            border-color: #ccc;
+                            height: 27px;
+                            "
+                        >
+                            <option v-for="item in scales" v-bind:value=" item.value ">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-secondary" @click="setPageScale( pageScale - 0.1 )">-</button>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-secondary" @click="setPageScale( 1 )">100%</button>
+                        <button type="button" class="btn btn-secondary" @click="resetPageToFill">Reset</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div>
-            <button class="" @click="setPageScale( pageScale - 0.1 )">-</button>
-            <button class="" @click="resetPageToFill">Reset</button>
-            <select @change="setPageScale( $event.target.value )"
-                    v-bind="{ value: pageScale }"
-            >
-                <option v-for="item in scales" v-bind:value=" item.value ">{{ item.name }}</option>
-            </select>
-            <button @click="setPageScale(1)">100%</button>
-            <button class="" @click="setPageScale( parseFloat(pageScale) + 0.1 )">+</button>
+
+        <div id="area-split"></div>
+
+        <div id="printer-area">
+            <div id="printer-area-top-bar">PDF File</div>
+            <div id="printer-area-center">
+                <!--<iframe src="http://m.oschina.net"></iframe>-->
+                <iframe></iframe>
+            </div>
         </div>
+
+
     </div>
 </template>
 
 <script>
     import * as MUTATION_TYPES from "../store/mutationTypes"
     import {WIDGET_TYPES} from "./Types"
-    import AppWidget from "./Widget.vue"
-    parseFloat()
+    import AppWidget  from "./Widget.vue"
+
     module.exports = {
         data: function () {
             return {
@@ -66,7 +99,11 @@
                 moveStartX: 0,
                 moveStartY: 0,
                 margin: 15,
-                resetScale: 0
+                resetScale: 0,
+                transformOrigin: {
+                    x: "50%",
+                    y: "50%"
+                }
             };
         },
 
@@ -157,6 +194,9 @@
             },
 
             mouseWheel: function (event) {
+                this.transformOrigin.x = Math.round(( event.clientX - this.pageLeft - 70) * 100 / this.page.width) + "%";
+                this.transformOrigin.y = Math.round(( event.clientY - this.pageTop - (56 + 30)) * 100 / this.page.height) + "%";
+
                 if (event.deltaY > 0) {
                     this.setPageScale(parseFloat(this.pageScale) - 0.1);
                 } else if (event.deltaY < 0) {
@@ -184,6 +224,8 @@
 
                 this.pageLeft = (contentWidth - pageWidth) / 2;
                 this.pageTop = (contentHeight - pageHeight) / 2;
+                this.transformOrigin.x = "50%";
+                this.transformOrigin.y = "50%";
                 this.setPageScale(this.getFillScale());
             },
 
@@ -204,20 +246,56 @@
     }
 </script>
 
-<style>
+<style scoped>
 
     #work-space {
-        float: left;
-        height: 400px;
-        width: calc(100% - 270px);
+        display: flex;
         background-color: #929292;
+        flex: 1;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    #editor-area {
+        display: flex;
+        flex: 66.6666%;
+        background-color: #bfbfbf;
+        flex-direction: column;
 
     }
 
-    #work-space > .content {
+    #area-split {
+        display: flex;
+        height: 6px;
+        background-color: #fcfcff;
+    }
+
+    #printer-area {
+        display: flex;
+        flex: auto;
+        background-color: aqua;
+        flex-direction: column;
+    }
+
+    #editor-area-top-bar, #printer-area-top-bar {
+        width: 100%;
+        height: 31px;
+        border: 1px solid #838383;
+        padding: 1px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
+    }
+
+    #editor-area-center {
         overflow: hidden;
-        background-color: #d8d4d7;
-        height: calc(100% - 60px);
+        width: 100%;
+        flex: auto;
+    }
+
+    #editor-area-bottom-bar {
+        width: 100%;
+        border: 1px solid #838383;
+        padding: 1px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
     }
 
     #page {
@@ -227,10 +305,16 @@
         outline: #c3c3c3 dashed 3px;
         border-radius: 2px;
         background-size: 100% 100%;
+
     }
 
-    #space {
-        background-color: rgba(121, 118, 119, 0.4);
-        position: relative;
+    #printer-area-center {
+        display: flex;
+        background-color: #9f9c9e;
+        flex: auto;
+    }
+
+    iframe {
+        flex: auto;
     }
 </style>

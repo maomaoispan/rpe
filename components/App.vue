@@ -5,26 +5,25 @@
 <template>
     <div id="app">
 
-        <app-header></app-header>
+        <AppHeader></AppHeader>
 
-        <app-tool-bar></app-tool-bar>
+        <div id="content">
+            <AppToolBar></AppToolBar>
 
-        <app-space></app-space>
+            <AppWorkSpace></AppWorkSpace>
 
-        <app-file></app-file>
+            <AppPropertyBar></AppPropertyBar>
+        </div>
 
-        <app-property-bar></app-property-bar>
-
-        <app-footer></app-footer>
+        <AppFooter></AppFooter>
     </div>
 
 </template>
 
 <script>
     import AppHeader from "./Header.vue";
-    import AppToolBar from "./ToolBar.vue";
-    import AppSpace from "./WorkSpace.vue";
-    import AppFile from "./File.vue";
+    import AppToolBar from "./WidgetBar.vue";
+    import AppWorkSpace from "./WorkSpace.vue";
     import AppPropertyBar from "./PropertyBar.vue";
     import AppFooter from "./Footer.vue"
 
@@ -32,8 +31,7 @@
         components: {
             AppHeader,
             AppToolBar,
-            AppSpace,
-            AppFile,
+            AppWorkSpace,
             AppPropertyBar,
             AppFooter
         }
@@ -42,26 +40,21 @@
 
 <style>
 
-    html, #app {
+    html, body {
+        width: 100%;
         height: 100%;
-        font-size: 15px;
+        min-width: 500px;
+        min-height: 400px;
     }
 
-    body {
-        padding: 0;
-        border: 0;
+    #app {
+        width: 100%;
         height: 100%;
-        max-height: 100%;
-        position: relative;
     }
 
-    .title {
-        height: 30px;
-        border: 1px solid #838383;
-        padding: 3px;
+    #content {
+        display: flex;
+        height: calc(100% - 110px);
     }
 
-    .title {
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
-    }
 </style>

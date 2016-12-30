@@ -7,6 +7,7 @@
         <div class="content">
             <div v-if="activeWidget">
 
+
                 <!-- Public -->
                 <fieldset class="form-group">
                     <label>Left</label>
@@ -38,6 +39,7 @@
                            @input="updateWidget({ zIndex: $event.target.value })"
                     >
                 </fieldset>
+
 
                 <!-- Text -->
                 <div v-if="activeWidget.type === WIDGET_TYPES.TEXT">
@@ -101,7 +103,6 @@
                         >
                     </fieldset>
 
-
                 </div>
 
 
@@ -144,7 +145,7 @@
 
                     <fieldset class="form-group">
                         <label>File</label>
-                        <select class="form-control"
+                        <select class="form-control form-control-sm"
                                 v-bind="{ value: activeWidget.src }"
                                 @change="updateWidget({ src: $event.target.value })"
                         >
@@ -380,7 +381,7 @@
 
                 <!-- Delete Button -->
                 <hr/>
-                <button class="btn btn-danger btn-block"
+                <button class="btn btn-danger btn-sm btn-block"
                         @click="deleteWidget">Delete
                 </button>
 
@@ -510,12 +511,9 @@
 <style>
 
     #property-bar {
-        top: 35px;
-        right: 0;
-        height: calc(100% - 70px);
+        height: 100%;
         width: 200px;
         background-color: #eaeaec;
-        position: absolute;
     }
 
     #property-bar > .content {
