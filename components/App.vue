@@ -65,7 +65,7 @@
     }
 
     .item-header, .item-footer {
-        padding: 2px 4px 2px 4px;
+        padding: 1px 4px 1px 4px;
         border: 1px solid #838383;
         background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
         display: flex;

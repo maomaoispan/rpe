@@ -90,6 +90,9 @@
         methods: {
             setWorkspaceSplit: function (type) {
                 this.$store.commit(MUTATION_TYPES.CONFIG_UPDATE, {workspaceSplit: type});
+                setTimeout(function () {
+                    $(window).trigger("resize");
+                },100)
             }
         }
     }

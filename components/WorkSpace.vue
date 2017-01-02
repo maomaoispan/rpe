@@ -13,10 +13,22 @@
         >
             <div class="item-header">
                 <div>Work Space</div>
-                <div class="btn-group btn-group-sm pull-right" role="group">
-                    <button type="button" class="btn btn-secondary">Left</button>
-                    <button type="button" class="btn btn-secondary">center</button>
-                    <button type="button" class="btn btn-secondary">right</button>
+                <div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-secondary">Left</button>
+                        <button type="button" class="btn btn-secondary">center</button>
+                        <button type="button" class="btn btn-secondary">right</button>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-secondary">top</button>
+                        <button type="button" class="btn btn-secondary">up</button>
+                        <button type="button" class="btn btn-secondary">down</button>
+                        <button type="button" class="btn btn-secondary">bottom</button>
+                    </div>
+
+                </div>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-secondary" @click="genaratePdf">Generate</button>
                 </div>
             </div>
 
@@ -48,13 +60,17 @@
             </div>
 
             <div class="item-footer">
-                <div>Erro</div>
+                <div id="editor-area-msg">Message:Please input a number!</div>
                 <div class="pull-right">
                     <div class="btn-group btn-group-sm" role="group">
-                        <button type="button" class="btn btn-secondary" @click="resetPageToFill">Reset</button>
+                        <button type="button" class="btn btn-secondary"
+                                @click="resetPageToFill"
+                        >Reset
+                        </button>
 
                         <button type="button" class="btn btn-secondary"
-                                @click="setPageScale( parseFloat(pageScale) + 0.1 )">+
+                                @click="setPageScale( parseFloat(pageScale) + 0.1 )"
+                        >+
                         </button>
                     </div>
                     <div class="btn-group btn-group-sm" role="group">
@@ -285,39 +301,81 @@
                     this.editorFlexTempSize = this.editorFlexSize;
                     this.splitMoveStartX = parseFloat(event.clientX);
                     this.splitMoveStartY = parseFloat(event.clientY);
+
                 }
             },
             spaceMouseMove: function (event) {
+                let $workSpace = $("#work-space"),
+                    cursor = "",
+                    newHeight = 0,
+                    newWidth = 0,
+                    newSize = this.editorFlexSize;
                 if (this.splitIsDown) {
-                    let cursor = "",
-                        newHeight = 0,
-                        newWidth = 0,
-                        newSize = this.editorFlexSize;
+                    newHeight = this.editorFlexTempSize + ( parseFloat(event.clientX) - parseFloat(this.splitMoveStartX));
+                    newWidth = this.editorFlexTempSize + ( parseFloat(event.clientY) - parseFloat(this.splitMoveStartY));
 
-                    if (this.splitIsDown) {
-                        newHeight = this.editorFlexTempSize + ( parseFloat(event.clientX) - parseFloat(this.splitMoveStartX));
-                        newWidth = this.editorFlexTempSize + ( parseFloat(event.clientY) - parseFloat(this.splitMoveStartY));
-
-
-                        if (this.$store.getters.config.workspaceSplit === TYPES.WORKSPACE_SPLIT.VERTICAL) {
-                            cursor = "s-resize";
-                            newSize = newWidth;
-                        } else {
-                            cursor = "w-resize";
-                            newSize = newHeight
-                        }
-
-                        $("#work-space").css({cursor: cursor});
-                        this.editorFlexSize = newSize;
+                    if (this.$store.getters.config.workspaceSplit === TYPES.WORKSPACE_SPLIT.VERTICAL) {
+                        cursor = "s-resize";
+                        newSize = newWidth;
+                    } else {
+                        cursor = "w-resize";
+                        newSize = newHeight;
                     }
-                }
 
+                    $workSpace.css({cursor: cursor});
+                    this.editorFlexSize = newSize;
+
+                    setTimeout(function () {
+                        $(window).trigger("resize");
+                    }, 100)
+                }
             },
             spaceMouseUp: function (event) {
                 $("#work-space").css({cursor: "default"});
                 this.splitIsDown = false;
                 $("iframe").show();
             },
+
+            genaratePdf: function () {
+                console.log("generatePdf");
+
+                let doc = new PDFDocument({
+                        info: {
+                            Title: "www.rapidlabel.com",
+                            Author: "www.rapidlabel.com"
+                        },
+                        autoFirstPage: false
+                    }),
+                    stream = doc.pipe(blobStream()),
+                    i = 0,
+                    widgets = this.$store.getters.widgets,
+                    page = this.$store.getters.page,
+                    url = "";
+
+
+                stream.on("finish", function () {
+                    url = stream.toBlobURL("application/pdf");
+                    $("iframe")[0].src = url;
+                })
+
+
+                for (i = 0; i < widgets.length; i++) {
+                    doc.addPage({
+                        size: [page.width / 10, page.height / 10],
+                        margin: 0
+                    });
+
+                    doc.fontSize(5)
+                        .fillColor("#000000")
+                        .text("www.itopdf.com", 10, 10);
+
+                    doc.rect(10, 20, 50, 10)
+                        .fill("#EEEEEE");
+                }
+
+                doc.save();
+                doc.end();
+            }
         },
 
         mounted: function () {
@@ -345,7 +403,7 @@
         display: flex;
         background-color: #d2d2d2;
         flex-flow: column;
-        overflow: hidden;
+        overflow: auto;
     }
 
     #area-split {
@@ -362,6 +420,11 @@
     }
 
     #editor-area-center {
+        overflow: hidden;
+        flex: auto;
+    }
+
+    #editor-area-msg {
         overflow: hidden;
         flex: auto;
     }
