@@ -12,7 +12,8 @@ Vue.use(Vuex)
 
 const state = {
     config: {
-        pageScale: 1
+        pageScale: 1,
+        workspaceSplit: TYPES.WORKSPACE_SPLIT.VERTICAL
     },
     page: {
         width: 700,
@@ -35,17 +36,17 @@ const state = {
             fontColor: "#ff3b00",
             fontWeight: TYPES.FONT_WEIGHT.BOLD.value,
             fontStyle: TYPES.FONT_STYLE.OBLIQUE.value,
-            dataId:""
+            dataId: ""
         }, {
             type: "IMAGE",
             id: "22",
-            left: 32,
-            top: 113,
+            left: 68,
+            top: 189,
             contentWidth: 0,
             contentHeight: 0,
             zIndex: 20,
-            width: 200,
-            height: 160,
+            width: 100,
+            height: 60,
             src: "../assets/XiQiJwelry.png",
             displayMode: TYPES.IMAGE_DISPLAY_MODE.FIT_HEIGHT.value
         }, {
@@ -86,7 +87,7 @@ const state = {
             fontColor: "#9484ff",
             fontWeight: TYPES.FONT_WEIGHT.BOLD.value,
             fontStyle: TYPES.FONT_STYLE.OBLIQUE.value,
-            dataId:""
+            dataId: ""
         }, {
             id: "44",
             type: "BARCODE",
@@ -112,21 +113,21 @@ const state = {
             marginBottom: 20,
             marginLeft: 20,
             marginRight: 20,
-            dataId:""
+            dataId: ""
         }, {
             type: "QR_CODE",
             id: "55",
-            left: 560,
-            top: 170,
+            left: 600,
+            top: 195,
             contentWidth: 0,
             contentHeight: 0,
             zIndex: 10,
             value: "JiuFuJiuJiu",
-            width: 100,
-            height: 100,
+            width: 70,
+            height: 70,
             background: "#FFFFFF",
             foreground: "#000000",
-            dataId:""
+            dataId: ""
         }
     ],
     activeWidget: null,

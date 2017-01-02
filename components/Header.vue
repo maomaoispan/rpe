@@ -42,10 +42,26 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
                        href="#"
+                       id="dropdonw-view"
+                       data-toggle="dropdown"
+                    >
+                        View
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" @click="setWorkspaceSplit( SPLIT.VERTICAL )">[ - ]Vertical</a>
+                        <a class="dropdown-item" href="#" @click="setWorkspaceSplit( SPLIT.HORIZONAL )">[ | ]Horizontal</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
                        id="dropdown-help"
-                       data-toggle="dropdown">
-                        Help</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown-help">
+                       data-toggle="dropdown"
+                    >
+                        Help
+                    </a>
+                    <div class="dropdown-menu">
                         <a class="dropdown-item" href="#">About</a>
                         <a class="dropdown-item" href="#">Help</a>
                         <a class="dropdown-item" href="#">FAQ</a>
@@ -58,13 +74,28 @@
     </nav>
 </template>
 
-<style>
+<script>
 
-    /*#header{*/
-    /*padding: 8px ;*/
-    /*color: white;*/
-    /*background-color: #4982a7;*/
-    /*height: 35px;*/
-    /*}*/
+    import * as MUTATION_TYPES from "../store/mutationTypes";
+    import * as TYPES from "./Types";
+
+
+    module.exports = {
+        data: function () {
+            return {
+                SPLIT: TYPES.WORKSPACE_SPLIT
+            }
+        },
+
+        methods: {
+            setWorkspaceSplit: function (type) {
+                this.$store.commit(MUTATION_TYPES.CONFIG_UPDATE, {workspaceSplit: type});
+            }
+        }
+    }
+
+</script>
+
+<style>
 
 </style>

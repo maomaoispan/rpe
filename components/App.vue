@@ -7,8 +7,8 @@
 
         <AppHeader></AppHeader>
 
-        <div id="content">
-            <AppToolBar></AppToolBar>
+        <div id="container">
+            <AppWidgetBar></AppWidgetBar>
 
             <AppWorkSpace></AppWorkSpace>
 
@@ -22,7 +22,7 @@
 
 <script>
     import AppHeader from "./Header.vue";
-    import AppToolBar from "./WidgetBar.vue";
+    import AppWidgetBar from "./WidgetBar.vue";
     import AppWorkSpace from "./WorkSpace.vue";
     import AppPropertyBar from "./PropertyBar.vue";
     import AppFooter from "./Footer.vue"
@@ -30,7 +30,7 @@
     export default{
         components: {
             AppHeader,
-            AppToolBar,
+            AppWidgetBar,
             AppWorkSpace,
             AppPropertyBar,
             AppFooter
@@ -43,18 +43,46 @@
     html, body {
         width: 100%;
         height: 100%;
-        min-width: 500px;
+        min-width: 600px;
         min-height: 400px;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        overflow: auto;
     }
 
     #app {
-        width: 100%;
-        height: 100%;
+        display: flex;
+        flex: auto;
+        flex-flow: column;
+        overflow: auto;
     }
 
-    #content {
+    #container {
         display: flex;
-        height: calc(100% - 110px);
+        flex: auto;
+        flex-flow: row;
+    }
+
+    .item-header, .item-footer {
+        padding: 2px 4px 2px 4px;
+        border: 1px solid #838383;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
+        display: flex;
+        flex: 0 0 32px;
+        flex-flow: row;
+        justify-content: space-between;
+        overflow: auto;
+    }
+
+    .item-content {
+        flex-flow:column;
+        display: flex;
+        padding: 10px;
+        flex: auto;
+        overflow: auto;
+        border: 1px solid #838383;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
     }
 
 </style>

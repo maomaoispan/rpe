@@ -3,8 +3,8 @@
 */
 <template>
     <div id="property-bar">
-        <div class="title">Property</div>
-        <div class="content">
+        <div class="item-header">Property</div>
+        <div class="item-content">
             <div v-if="activeWidget">
 
 
@@ -511,15 +511,9 @@
 <style>
 
     #property-bar {
-        height: 100%;
-        width: 200px;
-        background-color: #eaeaec;
-    }
-
-    #property-bar > .content {
-        padding: 10px;
-        overflow: auto;
-        height: calc(100% - 40px);
+        display: flex;
+        flex: 0 0 200px;
+        flex-flow: column;
     }
 
     input[type=color] {

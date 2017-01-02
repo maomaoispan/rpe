@@ -62,3 +62,7 @@ export const BARCODE_TEXT_POSITION = {
     BOTTOM: {value: "bottom", name: "Bottom"}
 }
 
+export const WORKSPACE_SPLIT = {
+    VERTICAL: 0,
+    HORIZONAL: 1
+}

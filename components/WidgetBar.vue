@@ -3,14 +3,14 @@
 */
 <template>
     <div id="tool-bar">
-        <div class="title">
+        <div class="item-header">
             Widget
         </div>
-        <div class="content">
-            <div id="addWidgetText" @click="addWidget"></div>
-            <div id="addWidgetImage" @click="addWidget"></div>
-            <div id="addWidgetBarcode" @click="addWidget"></div>
-            <div id="addWidgetQRCode" @click="addWidget"></div>
+        <div class="item-content">
+            <div id="addWidgetText" class="btnWidget" @click="addWidget"></div>
+            <div id="addWidgetImage" class="btnWidget" @click="addWidget"></div>
+            <div id="addWidgetBarcode" class="btnWidget" @click="addWidget"></div>
+            <div id="addWidgetQRCode" class="btnWidget" @click="addWidget"></div>
         </div>
     </div>
 </template>
@@ -61,23 +61,22 @@
 
 
     #tool-bar {
-        width: 70px;
-        height: 100%;
-        background-color: #eaeaec;
-        overflow: auto;
+        display: flex;
+        flex: 0 0 70px;
+        flex-flow: column;
     }
 
-    #addWidgetText, #addWidgetImage, #addWidgetBarcode, #addWidgetQRCode {
-        margin: 12px;
+    .btnWidget {
+        margin : 8px 0 8px 0;
         border: 2px solid #797979;
         border-radius: 4px;
         padding: 1px;
         height: 48px;
+        width: 48px;
         background-size: contain;
-        /*cursor: pointer;;*/
     }
 
-    #addWidgetText:hover, #addWidgetImage:hover, #addWidgetBarcode:hover, #addWidgetQRCode:hover {
+    .btnWidget:hover {
         box-shadow: rgb(169, 169, 169) 0px 0px 18px;
     }
 
@@ -95,14 +94,6 @@
 
     #addWidgetQRCode {
         background-image: url("../assets/widget_qr_code_background.jpg");
-    }
-
-
-    .title {
-        height: 30px;
-        border: 1px solid #838383;
-        padding: 3px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
     }
 
 </style>

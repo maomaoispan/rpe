@@ -2,10 +2,17 @@
 * Created by Pan on 2016-12-14.
 */
 <template>
-    <div id="work-space">
-        <div id="editor-area">
-            <div id="editor-area-top-bar">
-                Work Space
+    <div id="work-space"
+         v-bind:style="{ flexFlow: splitMode }"
+         @mousedown="spaceMouseDown"
+         @mouseup="spaceMouseUp"
+         @mousemove="spaceMouseMove"
+    >
+        <div id="editor-area"
+             v-bind:style="{ flex: editorFlex }"
+        >
+            <div class="item-header">
+                <div>Work Space</div>
                 <div class="btn-group btn-group-sm pull-right" role="group">
                     <button type="button" class="btn btn-secondary">Left</button>
                     <button type="button" class="btn btn-secondary">center</button>
@@ -14,24 +21,24 @@
             </div>
 
             <div id="editor-area-center"
-                 @mousewheel="mouseWheel"
-                 @click="pageClick"
+                 @mousewheel="editorMouseWheel"
+                 @click="editorClick"
             >
                 <div id="page"
                      v-bind:style="{
                         width: pageWidth,
                         height: pageHeight,
                         transform: getPageScale,
-                        transformOrigin: transformOrigin.x +' ' + transformOrigin.y,
+                        transformOrigin: pageTransformOrigin.x +' ' + pageTransformOrigin.y,
                         left: pageLeft + 'px',
                         top: pageTop + 'px',
                         backgroundImage: 'url(' + page.backgroundImage + ')',
                         }"
-                     @click="pageClick"
-                     @mousedown="mouseDown"
-                     @mouseup="mouseUp"
-                     @mousemove="mouseMove"
-                     @mouseout="mouseUp"
+                     @click="editorClick"
+                     @mousedown="pageMouseDown"
+                     @mouseup="pageMouseUp"
+                     @mousemove="pageMouseMove"
+                     @mouseout="pageMouseUp"
 
                 >
                     <app-widget v-for="item in widgets"
@@ -40,42 +47,45 @@
                 </div>
             </div>
 
-            <div id="editor-area-bottom-bar">
+            <div class="item-footer">
+                <div>Erro</div>
                 <div class="pull-right">
                     <div class="btn-group btn-group-sm" role="group">
-                        <button type="button" class="btn btn-secondary" @click="setPageScale( parseFloat(pageScale) + 0.1 )">+
+                        <button type="button" class="btn btn-secondary" @click="resetPageToFill">Reset</button>
+
+                        <button type="button" class="btn btn-secondary"
+                                @click="setPageScale( parseFloat(pageScale) + 0.1 )">+
                         </button>
                     </div>
                     <div class="btn-group btn-group-sm" role="group">
                         <select @change="setPageScale( $event.target.value )"
                                 v-bind="{ value: pageScale }"
                                 style="
-                            border-radius: 3px;
-                            border-color: #ccc;
-                            height: 27px;
-                            "
+                                    border-radius: 3px;
+                                    border-color: #ccc;
+                                    height: 26.5px;
+                                    "
                         >
                             <option v-for="item in scales" v-bind:value=" item.value ">{{ item.name }}</option>
                         </select>
                     </div>
                     <div class="btn-group btn-group-sm" role="group">
-                        <button type="button" class="btn btn-secondary" @click="setPageScale( pageScale - 0.1 )">-</button>
-                    </div>
-                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-secondary" @click="setPageScale( pageScale - 0.1 )">-
+                        </button>
+
                         <button type="button" class="btn btn-secondary" @click="setPageScale( 1 )">100%</button>
-                        <button type="button" class="btn btn-secondary" @click="resetPageToFill">Reset</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="area-split"></div>
+        <div id="area-split" @mousedown="splitMouseDown" @mousemove="splitMouseMove" @mouseup="splitMouseUp"></div>
 
         <div id="printer-area">
-            <div id="printer-area-top-bar">PDF File</div>
+            <div class="item-header">PDF File</div>
             <div id="printer-area-center">
-                <!--<iframe src="http://m.oschina.net"></iframe>-->
-                <iframe></iframe>
+                <iframe src="http://m.oschina.net"></iframe>
+                <!--&lt;!&ndash;<iframe></iframe>&ndash;&gt;-->
             </div>
         </div>
 
@@ -85,7 +95,7 @@
 
 <script>
     import * as MUTATION_TYPES from "../store/mutationTypes"
-    import {WIDGET_TYPES} from "./Types"
+    import * as TYPES from "./Types"
     import AppWidget  from "./Widget.vue"
 
     module.exports = {
@@ -93,17 +103,24 @@
             return {
                 pageLeft: 110,
                 pageTop: 10,
-                tempLeft: 0,
-                tempTop: 0,
-                isDown: false,
-                moveStartX: 0,
-                moveStartY: 0,
-                margin: 15,
-                resetScale: 0,
-                transformOrigin: {
+                pageTempLeft: 0,
+                pageTempTop: 0,
+                pageIsDown: false,
+                pageMoveStartX: 0,
+                pageMoveStartY: 0,
+                pageMargin: 15,
+                pageResetScale: 0,
+                pageTransformOrigin: {
                     x: "50%",
                     y: "50%"
-                }
+                },
+
+                splitIsDown: false,
+                splitMoveStartX: 0,
+                splitMoveStartY: 0,
+
+                editorFlexSize: 300,
+                editorFlexTempSize: 0
             };
         },
 
@@ -128,6 +145,8 @@
             },
             scales: function () {
                 return [
+                    {value: 0.1, name: "10%"},
+                    {value: 0.2, name: "20%"},
                     {value: 0.3, name: "30%"},
                     {value: 0.4, name: "40%"},
                     {value: 0.5, name: "50%"},
@@ -147,55 +166,65 @@
                     {value: 1.9, name: "190%"},
                     {value: "2.0", name: "200%"},
                 ]
+            },
+            splitMode: function () {
+                if (this.$store.getters.config.workspaceSplit === TYPES.WORKSPACE_SPLIT.HORIZONAL) {
+                    return "row";
+                }
+                return "column";
+            },
+
+            editorFlex: function () {
+                return "0 0 " + this.editorFlexSize + "px";
             }
         },
 
         methods: {
-            pageClick: function (event) {
+            editorClick: function (event) {
                 this.$store.commit(MUTATION_TYPES.ACTIVE_WIDGET, null);
             },
 
             setPageScale: function (scale) {
                 let _scale = parseFloat(scale).toFixed(1);
-                if (_scale >= 0.3 && _scale <= 2) {
+                if (_scale >= 0.1 && _scale <= 2) {
                     this.$store.commit(MUTATION_TYPES.CONFIG_UPDATE, {pageScale: _scale});
                 }
             },
 
-            mouseDown: function (event) {
-                this.tempLeft = parseFloat(event.target.style.left);
-                this.tempTop = parseFloat(event.target.style.top);
-                this.moveStartX = parseFloat(event.clientX);
-                this.moveStartY = parseFloat(event.clientY);
-                this.isDown = true;
+            pageMouseDown: function (event) {
+                this.pageTempLeft = parseFloat(event.target.style.left);
+                this.pageTempTop = parseFloat(event.target.style.top);
+                this.pageMoveStartX = parseFloat(event.clientX);
+                this.pageMoveStartY = parseFloat(event.clientY);
+                this.pageIsDown = true;
             },
 
-            mouseMove: function (event) {
-                if (this.isDown) {
+            pageMouseMove: function (event) {
+                if (this.pageIsDown) {
                     $(event.target).css({
                         cursor: "move"
                     });
 
-                    var newLeft = Math.round(this.tempLeft + ( parseFloat(event.clientX) - parseFloat(this.moveStartX)));
-                    var newTop = Math.round(this.tempTop + (parseFloat(event.clientY) - parseFloat(this.moveStartY)));
+                    var newLeft = Math.round(this.pageTempLeft + ( parseFloat(event.clientX) - parseFloat(this.pageMoveStartX)));
+                    var newTop = Math.round(this.pageTempTop + (parseFloat(event.clientY) - parseFloat(this.pageMoveStartY)));
 
                     this.pageLeft = newLeft;
                     this.pageTop = newTop;
                 }
             },
 
-            mouseUp: function (event) {
-                if (this.isDown) {
-                    this.isDown = false;
+            pageMouseUp: function (event) {
+                if (this.pageIsDown) {
+                    this.pageIsDown = false;
                     $(event.target).css({
                         cursor: "default"
                     });
                 }
             },
 
-            mouseWheel: function (event) {
-                this.transformOrigin.x = Math.round(( event.clientX - this.pageLeft - 70) * 100 / this.page.width) + "%";
-                this.transformOrigin.y = Math.round(( event.clientY - this.pageTop - (56 + 30)) * 100 / this.page.height) + "%";
+            editorMouseWheel: function (event) {
+                this.pageTransformOrigin.x = Math.round(( event.clientX - this.pageLeft - 70) * 100 / this.page.width) + "%";
+                this.pageTransformOrigin.y = Math.round(( event.clientY - this.pageTop - (56 + 30)) * 100 / this.page.height) + "%";
 
                 if (event.deltaY > 0) {
                     this.setPageScale(parseFloat(this.pageScale) - 0.1);
@@ -209,10 +238,10 @@
                     pageHeight = this.$store.getters.page.height,
                     _contentWidth = $("#page").parent().width(),
                     _contentHeight = $("#page").parent().height(),
-                    scaleX = _contentWidth / (pageWidth + this.margin * 2),
-                    scaleY = _contentHeight / (pageHeight + this.margin * 2);
+                    scaleX = _contentWidth / (pageWidth + this.pageMargin * 2),
+                    scaleY = _contentHeight / (pageHeight + this.pageMargin * 2);
                 let scale = scaleX < scaleY ? scaleX : scaleY;
-                this.resetScale = scale;
+                this.pageResetScale = scale;
                 return scale;
             },
 
@@ -224,14 +253,71 @@
 
                 this.pageLeft = (contentWidth - pageWidth) / 2;
                 this.pageTop = (contentHeight - pageHeight) / 2;
-                this.transformOrigin.x = "50%";
-                this.transformOrigin.y = "50%";
+                this.pageTransformOrigin.x = "50%";
+                this.pageTransformOrigin.y = "50%";
                 this.setPageScale(this.getFillScale());
             },
 
-            save: function () {
-                this.$store.commit
-            }
+
+            splitMouseDown: function (event) {
+                this.splitIsDown = true;
+                $("iframe").hide();
+            },
+            splitMouseMove: function (event) {
+                let cursor = "";
+                if (this.$store.getters.config.workspaceSplit === TYPES.WORKSPACE_SPLIT.VERTICAL) {
+                    cursor = "s-resize";
+                } else {
+                    cursor = "w-resize";
+                }
+
+                $(event.target).css({cursor: cursor});
+            },
+            splitMouseUp: function (event) {
+                this.splitIsDown = false;
+                $("iframe").show();
+                $(event).css({cursor: "default"});
+            },
+
+
+            spaceMouseDown: function (event) {
+                if (this.splitIsDown) {
+                    this.editorFlexTempSize = this.editorFlexSize;
+                    this.splitMoveStartX = parseFloat(event.clientX);
+                    this.splitMoveStartY = parseFloat(event.clientY);
+                }
+            },
+            spaceMouseMove: function (event) {
+                if (this.splitIsDown) {
+                    let cursor = "",
+                        newHeight = 0,
+                        newWidth = 0,
+                        newSize = this.editorFlexSize;
+
+                    if (this.splitIsDown) {
+                        newHeight = this.editorFlexTempSize + ( parseFloat(event.clientX) - parseFloat(this.splitMoveStartX));
+                        newWidth = this.editorFlexTempSize + ( parseFloat(event.clientY) - parseFloat(this.splitMoveStartY));
+
+
+                        if (this.$store.getters.config.workspaceSplit === TYPES.WORKSPACE_SPLIT.VERTICAL) {
+                            cursor = "s-resize";
+                            newSize = newWidth;
+                        } else {
+                            cursor = "w-resize";
+                            newSize = newHeight
+                        }
+
+                        $("#work-space").css({cursor: cursor});
+                        this.editorFlexSize = newSize;
+                    }
+                }
+
+            },
+            spaceMouseUp: function (event) {
+                $("#work-space").css({cursor: "default"});
+                this.splitIsDown = false;
+                $("iframe").show();
+            },
         },
 
         mounted: function () {
@@ -250,71 +336,57 @@
 
     #work-space {
         display: flex;
-        background-color: #929292;
-        flex: 1;
-        flex-direction: column;
+        flex: 1 1 0;
+        flex-flow: row;
         overflow: hidden;
     }
 
     #editor-area {
         display: flex;
-        flex: 66.6666%;
-        background-color: #bfbfbf;
-        flex-direction: column;
-
+        background-color: #d2d2d2;
+        flex-flow: column;
+        overflow: hidden;
     }
 
     #area-split {
-        display: flex;
-        height: 6px;
-        background-color: #fcfcff;
+        background-color: #efefef;
+        flex: 0 0 2px;
+        border: 1px solid #838383;
+        overflow: hidden;
     }
 
     #printer-area {
         display: flex;
-        flex: auto;
-        background-color: aqua;
+        flex: 1 1 0;
         flex-direction: column;
-    }
-
-    #editor-area-top-bar, #printer-area-top-bar {
-        width: 100%;
-        height: 31px;
-        border: 1px solid #838383;
-        padding: 1px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
     }
 
     #editor-area-center {
         overflow: hidden;
-        width: 100%;
         flex: auto;
-    }
-
-    #editor-area-bottom-bar {
-        width: 100%;
-        border: 1px solid #838383;
-        padding: 1px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
     }
 
     #page {
         background-color: #ffffff;
         position: relative;
         outline-offset: 4px;
-        outline: #c3c3c3 dashed 3px;
+        outline: #ffffff dashed 3px;
         border-radius: 2px;
         background-size: 100% 100%;
-
+        display: block;
     }
 
     #printer-area-center {
-        display: flex;
-        background-color: #9f9c9e;
+        background-color: rgba(252, 150, 37, 0.47);
         flex: auto;
+        height: 100%;
+        width: 100%;
+
     }
 
     iframe {
-        flex: auto;
+        display: block;
+        width: 100%;
+        height: 100%;
     }
 </style>

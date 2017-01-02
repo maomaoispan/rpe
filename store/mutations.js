@@ -20,7 +20,7 @@ const mutations = {
                     fontColor: "#000000",
                     fontWeight: TYPES.FONT_WEIGHT.BOLD.value,
                     fontStyle: TYPES.FONT_STYLE.OBLIQUE.value,
-                    dataId:""
+                    dataId: ""
                 }
                 break;
 
@@ -55,7 +55,7 @@ const mutations = {
                     marginBottom: 10,
                     marginLeft: 10,
                     marginRight: 10,
-                    dataId:""
+                    dataId: ""
                 }
                 break;
 
@@ -67,7 +67,7 @@ const mutations = {
                     height: 100,
                     background: "#FFFFFF",
                     foreground: "#000000",
-                    dataId:""
+                    dataId: ""
                 }
                 break;
 
@@ -83,8 +83,8 @@ const mutations = {
             }
 
             widget.id = (new Date()).getTime();
-            widget.left = state.page.width * 0.3;
-            widget.top = state.page.height * 0.3;
+            widget.left = Math.ceil((state.page.width - 100) * 0.8 * Math.random());
+            widget.top = Math.ceil((state.page.height - 100) * 0.8 * Math.random());
             widget.contentWidth = 0;
             widget.contentHeight = 0;
             widget.zIndex = zIndex + 1;
