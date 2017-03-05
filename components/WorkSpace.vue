@@ -100,7 +100,7 @@
         <div id="printer-area">
             <div class="item-header">PDF File</div>
             <div id="printer-area-center">
-                <iframe src="http://m.oschina.net"></iframe>
+                <iframe  v-show="!splitIsDown" src="http://m.oschina.net"></iframe>
                 <!--&lt;!&ndash;<iframe></iframe>&ndash;&gt;-->
             </div>
         </div>
@@ -277,7 +277,7 @@
 
             splitMouseDown: function (event) {
                 this.splitIsDown = true;
-                $("iframe").hide();
+//                $("iframe").hide();
             },
             splitMouseMove: function (event) {
                 let cursor = "";
@@ -291,7 +291,7 @@
             },
             splitMouseUp: function (event) {
                 this.splitIsDown = false;
-                $("iframe").show();
+//                $("iframe").show();
                 $(event).css({cursor: "default"});
             },
 
@@ -333,7 +333,7 @@
             spaceMouseUp: function (event) {
                 $("#work-space").css({cursor: "default"});
                 this.splitIsDown = false;
-                $("iframe").show();
+//                $("iframe").show();
             },
 
             genaratePdf: function () {

@@ -1,5 +1,6 @@
 <template>
-    <nav class="navbar navbar-full bg-faded">
+    <nav class="navbar navbar-full navbar-dark bg-inverse">
+
         <button class="navbar-toggler hidden-sm-up"
                 type="button"
                 data-toggle="collapse"
@@ -35,6 +36,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdown-database">
                         <a class="dropdown-item" href="#">Import</a>
                         <a class="dropdown-item" href="#">Export</a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Manage</a>
                     </div>
                 </li>

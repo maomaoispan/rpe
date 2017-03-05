@@ -49,6 +49,7 @@
         margin: 0;
         display: flex;
         overflow: auto;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     }
 
     #app {
@@ -69,7 +70,7 @@
         border: 1px solid #838383;
         background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, #b8b8b8 100%);
         display: flex;
-        flex: 0 0 32px;
+        flex: 0 0 31px;
         flex-flow: row;
         justify-content: space-between;
         overflow: auto;
